@@ -1,11 +1,4 @@
-/* * {
-    box-sizing: border-box;
-}
-
-*, *::before, *::after {
-    box-sizing: inherit;
-} */
-
+/* Author: Michelle Gao */
 body, html {
     margin: 0;
     padding: 0;
@@ -19,6 +12,7 @@ body, html {
     width: 100%;
 }
 
+/* welcome section */
 .left-side {
     position: relative;
     flex: 1;
@@ -38,6 +32,7 @@ body, html {
     margin: 0;
 }
 
+/* formatting of welcome text */
 .welcome-text {
     font-size: 3rem;
     font-weight: 500;
@@ -46,6 +41,7 @@ body, html {
     max-width: 100%
 }
 
+/* login styling */
 .right-side {
     flex: 1;
     background-color: white;
@@ -99,11 +95,8 @@ button {
     background-color: #283626;
 }
 
+/* responsive design that shows only the login when screen dimension changes */
 @media only screen and (max-width: 850px) {
-    /* For mobile phones and tablets:
-    [class*="col-"] {
-        width: 100%;
-    } */
     .left-side {
         display: none;
     }
