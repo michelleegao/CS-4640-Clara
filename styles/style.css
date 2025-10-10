@@ -164,3 +164,87 @@ select:hover {
 .x-axis-labels div {
     font-size: 14px;
 }
+
+/* current routine tab styling */ 
+.products-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 90vh;
+    padding: 30px;
+    box-sizing: border-box;
+    gap: 30px;
+}
+
+.left-products-container { /* left side's container */
+    background-color: #cedbb6; 
+    flex: 0 0 60%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.left-products-inner { /* left side's sub container */
+    background-color: #ebe9dd;
+    border-radius: 15px;
+    width: 100%;
+    height: calc(100% - 80px);
+    margin-top: 35px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.right-products-container { /* right side's container */
+    background-color: #cedbb6;
+    flex: 0 0 35%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.right-products-inner { /* right side's sub container */
+    background-color: #ebe9dd;
+    border-radius: 15px;
+    width: 100%;
+    height: calc(100% - 100px);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.product-icons:hover {
+    cursor: pointer;
+}
+
+.products-list { /* space for list of products and checkboxes */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.product-item { /* styling for specific product items */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-checkbox { 
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  accent-color: #7ca982;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+.product-search-bar input { /* styling for search bar on right hand side */
+    display: flex;
+    align-items: center;
+    border-radius: 25px;
+    padding: 12px, 20px;
+    background-color: #ebe9dd;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 25px;
+}
