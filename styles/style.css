@@ -1,3 +1,5 @@
+
+/* Authors: Michelle Gao and Henna Panjshiri */
 * {
     margin: 0;
     padding: 0;
@@ -8,6 +10,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* navbar styling */
 .navbar {
     background-color: #7ca982;
     color: 243e36;
@@ -64,4 +67,100 @@ body {
     color: #1f2f1f;
     background-color: #CFE3CF;
     border-radius: 10px 10px 0 0;
+}
+
+/* dashboard filter styling */
+.dropdown-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: inline-block;
+}
+
+label {
+    margin-left: 22px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+select {
+    background-color: #b2bc9f;
+    color: #243e36;
+    border: none;
+    padding: 8px 25px 8px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    font-weight: 500;
+}
+
+select:hover {
+    outline: 2px solid #70825b;
+}
+
+/* chart styling for dashboard */
+.chart-container {
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    background-color: #ebe9dd;
+    width: 90%;
+    max-width: 1300px;
+    margin: 40px auto;
+    font-family: sans-serif;
+    color: #243e36;
+}
+
+.y-axis-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 10px;
+    height: 300px; /* chart height */
+}
+
+.y-axis-name {
+    writing-mode: vertical-rl; /* rotate text vertically */
+    transform: rotate(180deg); /* flip to read bottom-to-top */
+    font-weight: bold;
+    margin-right: 15px;
+    font-size: 16px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.y-axis-labels div {
+    text-align: right;
+    font-size: 14px;
+}
+
+.chart {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.chart-grid {
+    border-left: 2px solid #243e36; /* y-axis line */
+    border-bottom: 2px solid #243e36; /* x-axis line */
+    height: 300px;
+    position: relative;
+}
+
+.x-axis-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.x-axis-labels div {
+    font-size: 14px;
 }
