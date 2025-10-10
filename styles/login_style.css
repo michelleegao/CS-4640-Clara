@@ -1,0 +1,117 @@
+/* * {
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+} */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100%;
+}
+
+.left-side {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #e0eec6;
+    justify-content: center;
+    text-align: left;
+    padding: 2rem;
+}
+
+.left-side h1 {
+    position: absolute;
+    font-size: 3rem;
+    font-weight: 600;
+    top: 2rem;
+    margin: 0;
+}
+
+.welcome-text {
+    font-size: 3rem;
+    font-weight: 500;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    max-width: 100%
+}
+
+.right-side {
+    flex: 1;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 350px;
+    /* text-align: left; */
+}
+
+.login-form label{
+    align-self: flex-start;
+    margin-left: 10%;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.login-form input {
+    display: block;
+    box-sizing: border-box;
+    border-radius:  10px;
+    padding: 8px;
+    width: 80%;
+    border: none;
+    background-color: #f1f7ed;
+}
+
+button {
+    margin-top: 1rem;
+    border-radius: 15px;
+    padding: 0.7rem;
+    width: 80%;
+    border: none;
+    background-color: #7ca982;
+    cursor: pointer;
+}
+
+.continue-btn:hover {
+    background-color: #283626;
+}
+
+.signup-btn:hover {
+    background-color: #283626;
+}
+
+@media only screen and (max-width: 850px) {
+    /* For mobile phones and tablets:
+    [class*="col-"] {
+        width: 100%;
+    } */
+    .left-side {
+        display: none;
+    }
+    .right-side {
+        flex: 1 1 100%;
+        background-color: white;
+    }
+    .login-form {
+        box-shadow: none;
+    }
+}
