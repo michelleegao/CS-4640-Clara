@@ -78,22 +78,21 @@ body, html {
     background-color: #f1f7ed;
 }
 
-button {
+a.login-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
     margin-top: 1rem;
     border-radius: 15px;
     padding: 0.7rem;
-    width: 80%;
-    border: none;
+    width: 73%;
     background-color: #7ca982;
+    color: white;
     cursor: pointer;
 }
 
-.continue-btn:hover {
-    background-color: #283626;
-}
-
-.signup-btn:hover {
-    background-color: #283626;
+a.login-btn:hover {
+    background-color: #32432f;
 }
 
 /* responsive design that shows only the login when screen dimension changes */
