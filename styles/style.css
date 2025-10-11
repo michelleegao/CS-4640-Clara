@@ -12,6 +12,7 @@ body {
 
 /* navbar styling */
 .navbar {
+    position: relative;
     background-color: #7ca982;
     color: 243e36;
     display: flex;
@@ -37,6 +38,7 @@ body {
 }
 
 .nav-left a {
+    position: relative;
     text-decoration: none;
     color: #2F3E2F;
     font-weight: 600;
@@ -44,8 +46,21 @@ body {
 
 .nav-left a.active {
     background-color: #D9EAD3;
-    padding: 8px 12px;
+    padding: 14px 12px;
     border-radius: 10px 10px 0 0;
+    position: relative;
+    z-index: 2;
+}
+
+.navbar::after {
+    content: "";
+    position: absolute;
+    top: 100%;           /* starts just below the navbar */
+    left: 0;
+    width: 100%;        /* full page width */
+    height: 20vh;        /* covers roughly 1/5 of the page height */
+    background-color: #D9EAD3; /* same as active highlight color */
+    z-index: -1;         /* behind the containers */
 }
 
 .nav-right {
@@ -65,8 +80,9 @@ body {
 
 .nav-left a:hover {
     color: #1f2f1f;
-    background-color: #CFE3CF;
+    background-color: #D9EAD3;
     border-radius: 10px 10px 0 0;
+    padding: 14px 12px;
 }
 
 /* dashboard filter styling */
@@ -167,6 +183,7 @@ select:hover {
 
 /* current routine tab styling */ 
 .products-container {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: stretch;
@@ -225,7 +242,15 @@ select:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    flex: 1 1 0;
+    max-width: 25%;
+}
+
+.product-rect {
+    width: 80%;
+    height: auto; 
+    max-height: 40vh;
+    margin-bottom: 15px;
 }
 
 .product-checkbox { 
