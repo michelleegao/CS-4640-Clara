@@ -22,7 +22,7 @@ body {
     padding: 10px 40px;
 }
 
-.nav-left {
+.nav-left { 
     display: flex;
     align-items: center;
 }
@@ -30,8 +30,10 @@ body {
 .nav-left ul {
     list-style: none;
     display: flex;
+    flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    gap: 10px;
 }
 
 .nav-left li {
@@ -56,22 +58,28 @@ body {
 .navbar::after {
     content: "";
     position: absolute;
-    top: 100%;           /* starts just below the navbar */
+    top: 100%;
     left: 0;
-    width: 100%;        /* full page width */
-    height: 20vh;        /* covers roughly 1/5 of the page height */
-    background-color: #D9EAD3; /* same as active highlight color */
-    z-index: -1;         /* behind the containers */
+    width: 100%;
+    height: 20vh;
+    background-color: #D9EAD3;
+    z-index: -1;
 }
 
 .nav-right {
     display: flex;
     align-items: center;
+    align-self: flex-end;
     gap: 10px;
 }
 
 .home-icon {
     text-decoration: none;
+}
+
+.nav-left a.home-icon:hover {
+    background-color: transparent;
+    padding: 0;
 }
 
 .profile-icon {
@@ -86,12 +94,49 @@ body {
     padding: 14px 12px;
 }
 
-/* dashboard filter styling */
+/* ------------- Navbar responsive styling -------------- */
+@media (max-width: 900px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+  }
+
+  .nav-left ul {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nav-left li {
+    margin-left: 0;
+  }
+
+  .nav-right {
+    margin-top: 10px;
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 8px 15px;
+  }
+
+  .nav-left a {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .nav-right a {
+    font-size: 1em;
+  }
+}
+
+/* ------------- dashboard filter styling --------------*/
 .dropdown-container {
-    background-color: white;
-    padding: 20px;
+    background-color: transparent;
+    padding: 5px;
     border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     display: inline-block;
 }
@@ -119,7 +164,7 @@ select:hover {
     outline: 2px solid #70825b;
 }
 
-/* chart styling for dashboard */
+/* ------------ chart styling for dashboard ------------*/
 .chart-container {
     display: flex;
     align-items: flex-end;
@@ -127,7 +172,7 @@ select:hover {
     background-color: #ebe9dd;
     width: 90%;
     max-width: 1300px;
-    margin: 40px auto;
+    margin: 30px auto 40px;
     font-family: sans-serif;
     color: #243e36;
 }
@@ -182,7 +227,7 @@ select:hover {
     font-size: 14px;
 }
 
-/* current routine tab styling */ 
+/* -------------------- Current Routine styling ---------------------- */ 
 .products-container {
     position: relative;
     display: flex;
@@ -273,9 +318,57 @@ select:hover {
     width: 100%;
     box-sizing: border-box;
     font-size: 25px;
+}   
+
+.right-products-inner span {
+    margin: 8px 0;
+    font-size: 25px;
+    color: #2F3E2F;
+    padding-left: 8px;
 }
 
-/* ---------- Page layout ---------- */
+.right-products-inner hr {
+    border: none;
+    border-top: 1.5px solid black;
+    margin: 6px, 0;
+}
+
+/* -------------- Current Routine responsive styling --------------*/
+@media (max-width: 1000px) {
+  .products-container {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+  }
+
+  .left-products-container,
+  .right-products-container {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .left-products-inner,
+  .right-products-inner {
+    height: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .products-container {
+    gap: 15px;
+  }
+
+  .product-item {
+    max-width: 45%;
+  }
+
+  .products-list {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+/* ---------- Daily Logger Page layout ---------- */
 .page {
     background: #eef5ee;
     min-height: 100vh;
