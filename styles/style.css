@@ -401,7 +401,26 @@ select:hover {
 .prompt-card h3 { font-weight: 700; margin-bottom: 12px; }
 .prompt-actions { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
 
-/* ---------- Week section ---------- */
+/* ---------- Toggles ------------ */
+.theme-toggle {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.theme-toggle input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-icon {
+    cursor: pointer;
+    transition: opacity 0.3s;
+    opacity: 1;
+}
+
 .week-header {
     display: flex;
     justify-content: space-between;

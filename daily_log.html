@@ -126,9 +126,22 @@
             <!-- Right Column: Routine tracker -->
             <aside class="right-col">
                 <div class="routine-card">
+                    <!-- Theme toggle (Sun / Moon) -->
+                    <div class="theme-toggle" style="margin-bottom: 15px;">
+                        <input type="radio" name="theme" id="sun" checked>
+                        <label for="sun">
+                            <img src="images/sun.png" alt="Sun Icon" class="theme-icon" style="width:40px;">
+                        </label>
+
+                        <input type="radio" name="theme" id="moon">
+                        <label for="moon">
+                            <img src="images/moon.png" alt="Moon Icon" class="theme-icon" style="width:37px;">
+                        </label>
+                    </div>
+
+                    <!-- Morning Routine Section -->
                     <div class="routine-section">
                         <div class="routine-header">
-                            <span class="icon">☀️</span>
                             <div class="checks">
                                 <label><input type="checkbox"> All</label>
                                 <label><input type="checkbox"> None</label>
@@ -157,9 +170,9 @@
 
                     <div class="divider"></div>
 
+                    <!-- Night Routine Section -->
                     <div class="routine-section">
                         <div class="routine-header">
-                            <span class="icon">🌙</span>
                             <div class="checks">
                                 <label><input type="checkbox"> All</label>
                                 <label><input type="checkbox"> None</label>
