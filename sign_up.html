@@ -14,19 +14,23 @@
         <!--Left side of login screen where welcome text is displayed. Does not show when screen dimensions are changed.-->
         <div class="left-side">
             <h1>Clara</h1>
-            <p class="welcome-text">Welcome back</p>
-            <p class="welcome-text">Login to your account</p>
+            <p class="welcome-text">Welcome to Clara</p>
+            <p class="welcome-text">Create an account today</p>
         </div>
 
         <!--Right side of login screen where login credentials are displayed.-->
         <div class="right-side">
             <form class="login-form" method="POST" action="controllers/login_controller.php">
+                <label>First Name</label>
+                <input type="text" name="first_name" placeholder="First Name" required>
+                <label>Last Name</label>
+                <input type="text" name="last_name" placeholder="Last Name" required>
                 <label>Email</label>
                 <input type="text" name="email" placeholder="Email" required>
                 <label>Password</label>
                 <input type="text" name="password" placeholder="Password" required>
-                <a href="daily_log.html" class="login-btn">Continue</a>
-                <a href="sign_up.html" class="login-btn">Sign Up</a>
+                <a href="daily_log.html" class="login-btn">Sign Up</a>
+                <a href="index.html" class="login-btn">Back to login</a>
                 <!-- <button type="Submit">Continue</button>
                 <button type="Submit">Sign Up</button> -->
             </form>
