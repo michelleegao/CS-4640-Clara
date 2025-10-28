@@ -2,7 +2,7 @@
 session_start();
 require_once '../config.php';
 
-class AuthController {
+class login_controller {
     private $pdo;
 
     public function __construct($pdo) {
