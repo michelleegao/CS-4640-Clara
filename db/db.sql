@@ -24,7 +24,7 @@ CREATE TABLE logs (
 -- user’s current routine items
 CREATE TABLE routine_products (
     id           SERIAL PRIMARY KEY,
-    user_id      INT  NOT NULL REFERENCES users_clara_clara(id) ON DELETE CASCADE,
+    user_id      INT  NOT NULL REFERENCES users_clara(id) ON DELETE CASCADE,
     name         TEXT NOT NULL,  -- free-text product name/label the user sees
     time_of_day  TEXT NOT NULL CHECK (time_of_day IN ('Morning','Night')),
 
