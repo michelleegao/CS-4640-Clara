@@ -1,5 +1,9 @@
 -- db/db.sql
 
+DROP TABLE IF EXISTS routine_products CASCADE;
+DROP TABLE IF EXISTS logs CASCADE;
+DROP TABLE IF EXISTS users_clara CASCADE;
+
 CREATE TABLE users_clara (
     id            SERIAL PRIMARY KEY,
     email         TEXT UNIQUE NOT NULL,
