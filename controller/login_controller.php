@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../Config.php';
+require_once __DIR__ . '/../src/Config.php';
 
 class login_controller {
     private $pdo;
