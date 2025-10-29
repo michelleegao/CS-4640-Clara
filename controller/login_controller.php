@@ -40,7 +40,7 @@ class login_controller {
         $display_name = ucwords(strtolower("$first $last"));
 
         // check for existing email
-        $check = $this->pdo->prepare("SELECT id FROM users WHERE email = :email");
+        $check = $this->pdo->prepare("SELECT id FROM users_clara WHERE email = :email");
         $check->execute(['email' => $email]);
         if ($check->fetch()) {
             echo "<h3>Email already registered. Please log in instead.</h3>";
@@ -51,7 +51,7 @@ class login_controller {
         // new user
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $insert = $this->pdo->prepare("
-            INSERT INTO users (email, password_hash, display_name)
+            INSERT INTO users_clara (email, password_hash, display_name)
             VALUES (:e, :p, :d)
         ");
         $insert->execute(['e' => $email, 'p' => $hash, 'd' => $display_name]);
@@ -77,7 +77,7 @@ class login_controller {
             return;
         }
 
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt = $this->pdo->prepare("SELECT * FROM users_clara WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

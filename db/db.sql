@@ -1,10 +1,6 @@
 -- db/db.sql
 
-DROP TABLE IF EXISTS routine_products CASCADE;
-DROP TABLE IF EXISTS logs CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-
-CREATE TABLE users (
+CREATE TABLE users_clara (
     id            SERIAL PRIMARY KEY,
     email         TEXT UNIQUE NOT NULL,
     password_hash TEXT        NOT NULL,
@@ -14,7 +10,7 @@ CREATE TABLE users (
 -- one daily log entry per row
 CREATE TABLE logs (
     id            SERIAL PRIMARY KEY,
-    user_id       INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id       INT NOT NULL REFERENCES users_clara(id) ON DELETE CASCADE,
     log_date      DATE NOT NULL,
     locations     TEXT[] NOT NULL DEFAULT '{}'::text[],   -- optional default
     severity      TEXT NOT NULL CHECK (severity IN ('Mild','Moderate','Severe')),
@@ -28,7 +24,7 @@ CREATE TABLE logs (
 -- user’s current routine items
 CREATE TABLE routine_products (
     id           SERIAL PRIMARY KEY,
-    user_id      INT  NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id      INT  NOT NULL REFERENCES users_clara_clara(id) ON DELETE CASCADE,
     name         TEXT NOT NULL,  -- free-text product name/label the user sees
     time_of_day  TEXT NOT NULL CHECK (time_of_day IN ('Morning','Night')),
 
