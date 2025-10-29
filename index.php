@@ -12,7 +12,7 @@ switch ($command) {
     case 'login':
         // redirect login POST to login_controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            require 'controllers/login_controller.php';
+            require 'controller/login_controller.php';
         } else {
             header("Location: index.html");
         }
@@ -21,7 +21,7 @@ switch ($command) {
     case 'signup':
         // redirect signup POST to login_controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            require 'controllers/login_controller.php';
+            require 'controller/login_controller.php';
         } else {
             header("Location: sign_up.html");
         }
