@@ -1,12 +1,15 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 session_start();
 require_once __DIR__ . '/../src/Config.php';
+require_once __DIR__ . '/../src/Database.php';
 
 class login_controller {
     private $pdo;
 
-    public function __construct($pdo) {
-        $this->pdo = $pdo;
+    public function __construct() {
+        $this->pdo = Database::pdo();
     }
 
     // handling sign up
@@ -32,7 +35,7 @@ class login_controller {
         }
 
         if (!empty($errors)) {
-            $this->displayErrors($errors, '../sign_up.html');
+            $this->displayErrors($errors, '../sign_up.php');
             return;
         }
 
@@ -44,7 +47,7 @@ class login_controller {
         $check->execute(['email' => $email]);
         if ($check->fetch()) {
             echo "<h3>Email already registered. Please log in instead.</h3>";
-            echo "<a href='../index.html'>Go to login</a>";
+            echo "<a href='../index.php'>Go to login</a>";
             return;
         }
 
@@ -57,7 +60,7 @@ class login_controller {
         $insert->execute(['e' => $email, 'p' => $hash, 'd' => $display_name]);
 
         echo "<h3>Account created successfully!</h3>";
-        echo "<a href='../index.html'>Login now</a>";
+        echo "<a href='../index.php'>Login now</a>";
     }
 
     // handling login
@@ -67,13 +70,13 @@ class login_controller {
 
         if (empty($email) || empty($password)) {
             echo "<h3>Please fill in both email and password fields.</h3>";
-            echo "<a href='../index.html'>Back to Login</a>";
+            echo "<a href='../index.php'>Back to Login</a>";
             return;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "<h3>Invalid email format.</h3>";
-            echo "<a href='../index.html'>Try again</a>";
+            echo "<a href='../index.php'>Try again</a>";
             return;
         }
 
@@ -88,7 +91,7 @@ class login_controller {
             exit();
         } else {
             echo "<h3>Invalid email or password.</h3>";
-            echo "<a href='../index.html'>Try again</a>";
+            echo "<a href='../index.php'>Try again</a>";
         }
     }
 
@@ -102,7 +105,7 @@ class login_controller {
 
 // router
 $action = $_GET['action'] ?? '';
-$auth = new AuthController($pdo);
+$auth = new login_controller();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'signup') {

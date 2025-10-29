@@ -78,6 +78,7 @@ body, html {
     background-color: #f1f7ed;
 }
 
+button.login-btn,
 a.login-btn {
     display: block;
     text-align: center;
@@ -91,6 +92,7 @@ a.login-btn {
     cursor: pointer;
 }
 
+button.login-btn:hover, 
 a.login-btn:hover {
     background-color: #32432f;
 }
