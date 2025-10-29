@@ -1,30 +1,24 @@
 <?php
-// require_once 'Config.php';
-// require_once 'Database.php';
-// require_once 'controller/login_controller.php';
+session_start();
+$message = '';
+$message_type = '';
 
-// // Establish database connection
-// try {
-//     $pdo = new PDO(
-//         "pgsql:host=" . Config::$db['host'] .
-//         ";port=" . Config::$db['port'] .
-//         ";dbname=" . Config::$db['database'],
-//         Config::$db['user'],
-//         Config::$db['pass']
-//     );
-//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// } catch (PDOException $e) {
-//     die("Database connection failed: " . $e->getMessage());
-// }
-
-// $controller = new login_controller($pdo);
+if (isset($_SESSION['error'])) {
+    $message = $_SESSION['error'];
+    $message_type = 'error';
+    unset($_SESSION['error']);
+} elseif (isset($_SESSION['success'])) {
+    $message = $_SESSION['success'];
+    $message_type = 'success';
+    unset($_SESSION['success']);
+}
 ?>
 
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles/login_style.css">
+    <link rel="stylesheet" href="styles/login_style.css?v=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Michelle Gao">
     <title>Sign Up</title>
@@ -42,6 +36,11 @@
         <!-- Right side sign-up form -->
         <div class="right-side">
             <form class="login-form" method="POST" action="controller/login_controller.php?action=signup">
+            <?php if ($message): ?>
+                <div class="alert <?= htmlspecialchars($message_type) ?>">
+                    <?= htmlspecialchars($message) ?>
+                </div>
+            <?php endif; ?>
                 <label for="first_name">First Name</label>
                 <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
 
@@ -54,10 +53,9 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Password" required>
 
-                <button type="submit" class="login-btn">Sign Up</button>
+                <button type="submit" class="submit-btn">Sign Up</button>
+                <a href="index.php" class="login-btn">Back to Login</a>
             </form>
-            
-            <a href="index.php" class="login-btn">Back to Login</a>
         </div>
     </div>
 </body>

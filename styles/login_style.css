@@ -57,7 +57,6 @@ body, html {
     align-items: center;
     width: 80%;
     max-width: 350px;
-    /* text-align: left; */
 }
 
 .login-form label{
@@ -78,7 +77,26 @@ body, html {
     background-color: #f1f7ed;
 }
 
-button.login-btn,
+button.submit-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 1rem;
+    border-radius: 15px;
+    padding: 0.7rem;
+    width: 80%;
+    background-color: #7ca982;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    appearance: none;
+    -webkit-appearance: none;
+}
+
 a.login-btn {
     display: block;
     text-align: center;
@@ -86,15 +104,67 @@ a.login-btn {
     margin-top: 1rem;
     border-radius: 15px;
     padding: 0.7rem;
-    width: 73%;
+    width: 74%;
     background-color: #7ca982;
     color: white;
     cursor: pointer;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    appearance: none;
+    -webkit-appearance: none;
 }
 
-button.login-btn:hover, 
-a.login-btn:hover {
+a.login-btn:hover,
+button.submit-btn:hover {
     background-color: #32432f;
+    transform: translateY(-2px);
+}
+
+a.login-btn:active,
+button.submit-btn:active {
+    background-color: #243024;
+    transform: translateY(0);
+}
+
+a.login-btn:focus,
+button.submit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(124, 169, 130, 0.4);
+}
+
+.alert {
+    display: block;
+    width: 80%;
+    padding: 12px 16px;
+    margin: 1rem auto;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    animation: fadeIn 0.5s ease-in-out;
+    word-wrap: break-word;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.alert.error {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+.alert.success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* responsive design that shows only the login when screen dimension changes */

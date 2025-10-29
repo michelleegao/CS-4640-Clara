@@ -12,7 +12,7 @@ class login_controller {
         $this->pdo = Database::pdo();
     }
 
-    // handling sign up
+    // sign up handler
     public function handleSignup() {
         $first = trim($_POST['first_name'] ?? '');
         $last = trim($_POST['last_name'] ?? '');
@@ -20,7 +20,7 @@ class login_controller {
         $password = trim($_POST['password'] ?? '');
         $errors = [];
 
-        // form validation
+        // validation
         if (!preg_match("/^[A-Za-z'-]+$/", $first)) {
             $errors[] = "First name can only contain letters, hyphens, or apostrophes.";
         }
@@ -31,27 +31,27 @@ class login_controller {
             $errors[] = "Invalid email format.";
         }
         if (!preg_match("/^(?=.*[A-Z])(?=.*\d).{6,}$/", $password)) {
-            $errors[] = "Password must be at least 6 characters, include a number and an uppercase letter.";
+            $errors[] = "Password must be at least 6 characters and include an uppercase letter and a number.";
         }
 
+        // if errors found, send them back to sign up page
         if (!empty($errors)) {
-            $this->displayErrors($errors, '../sign_up.php');
-            return;
+            $_SESSION['error'] = implode("<br>", $errors);
+            header("Location: ../sign_up.php");
+            exit();
         }
-
-        // concatenate display name
-        $display_name = ucwords(strtolower("$first $last"));
 
         // check for existing email
         $check = $this->pdo->prepare("SELECT id FROM users_clara WHERE email = :email");
         $check->execute(['email' => $email]);
         if ($check->fetch()) {
-            echo "<h3>Email already registered. Please log in instead.</h3>";
-            echo "<a href='../index.php'>Go to login</a>";
-            return;
+            $_SESSION['error'] = "Email already registered. Please log in instead.";
+            header("Location: ../index.php");
+            exit();
         }
 
-        // new user
+        // insert new user
+        $display_name = ucwords(strtolower("$first $last"));
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $insert = $this->pdo->prepare("
             INSERT INTO users_clara (email, password_hash, display_name)
@@ -59,25 +59,26 @@ class login_controller {
         ");
         $insert->execute(['e' => $email, 'p' => $hash, 'd' => $display_name]);
 
-        echo "<h3>Account created successfully!</h3>";
-        echo "<a href='../index.php'>Login now</a>";
+        $_SESSION['success'] = "Account created successfully! You can now log in.";
+        header("Location: ../index.php");
+        exit();
     }
 
-    // handling login
+    // login handler
     public function handleLogin() {
         $email = trim($_POST['email'] ?? '');
         $password = trim($_POST['password'] ?? '');
 
         if (empty($email) || empty($password)) {
-            echo "<h3>Please fill in both email and password fields.</h3>";
-            echo "<a href='../index.php'>Back to Login</a>";
-            return;
+            $_SESSION['error'] = "Please fill in both email and password.";
+            header("Location: ../index.php");
+            exit();
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo "<h3>Invalid email format.</h3>";
-            echo "<a href='../index.php'>Try again</a>";
-            return;
+            $_SESSION['error'] = "Invalid email format.";
+            header("Location: ../index.php");
+            exit();
         }
 
         $stmt = $this->pdo->prepare("SELECT * FROM users_clara WHERE email = :email");
@@ -90,10 +91,12 @@ class login_controller {
             header("Location: ../daily_log.html");
             exit();
         } else {
-            echo "<h3>Invalid email or password.</h3>";
-            echo "<a href='../index.php'>Try again</a>";
+            $_SESSION['error'] = "Incorrect email or password.";
+            header("Location: ../index.php");
+            exit();
         }
     }
+
 
     // helper function
     private function displayErrors($errors, $redirect) {
