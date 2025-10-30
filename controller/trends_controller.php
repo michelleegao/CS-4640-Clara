@@ -1,81 +1,91 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/../src/Database.php';
 
 class trends_controller {
 
-    public function dispatch(string $action, array $params = []): void {
-        $this->require_login();
+    public function dispatch(string $action, array $data = []): void {
+        if (empty($_SESSION['user_id'])) {
+            echo json_encode(['success' => false, 'error' => 'Please log in.']);
+            return;
+        }
 
         switch ($action) {
             case 'json':
-                $this->json($params);
+                $this->json($_GET);
                 break;
 
             default:
                 http_response_code(404);
-                echo json_encode(['success' => false, 'error' => 'Unknown trends action.']);
+                echo json_encode(['success' => false, 'error' => 'Unknown action.']);
         }
     }
 
     private function json(array $q): void {
-        header('Content-Type: application/json');
-        $user_id = $_SESSION['user_id'] ?? null;
+        header('Content-Type: application/json; charset=utf-8');
 
-        if (!$user_id) {
-            echo json_encode(['success' => false, 'error' => 'User not logged in']);
+        $uid = $_SESSION['user_id'] ?? null;
+        if (!$uid) {
+            echo json_encode(['success' => false, 'error' => 'User not logged in.']);
             return;
         }
 
-        // --- Handle filters ---
-        $range = $q['range'] ?? '1-month';
-        $severity = $q['severity'] ?? 'all';
-
-        $rangeToDays = [
-            '1-week'   => 7,
-            '1-month'  => 30,
-            '6-months' => 180,
-            '1-year'   => 365,
-            'all-time' => 36500
-        ];
-        $days = $rangeToDays[$range] ?? 30;
-
-        $pdo = Database::pdo();
-        $sql = "
-            SELECT log_date, COUNT(*) AS breakout_count
-            FROM logs
-            WHERE user_id = :uid
-              AND log_date >= CURRENT_DATE - INTERVAL '{$days} day'
-        ";
-
-        $params = [':uid' => $user_id];
-        if ($severity !== 'all') {
-            $sql .= " AND severity = :severity";
-            $params[':severity'] = ucfirst($severity); // Match DB case
-        }
-
-        $sql .= " GROUP BY log_date ORDER BY log_date ASC";
+        $range = $q['range'] ?? '1-week';
+        $severity = $q['severity'] ?? null;
 
         try {
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute($params);
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo json_encode(['success' => true, 'data' => $rows]);
-        } catch (Exception $e) {
-            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
-        }
-    }
+            $pdo = Database::pdo();
 
-    private function require_login(): void {
-        if (empty($_SESSION['user_id'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'error' => 'Please log in.']);
-            exit;
+            // Determine cutoff date in PHP
+            $cutoff = null;
+            switch ($range) {
+                case '1-week': $cutoff = date('Y-m-d', strtotime('-7 days')); break;
+                case '1-month': $cutoff = date('Y-m-d', strtotime('-30 days')); break;
+                case '6-months': $cutoff = date('Y-m-d', strtotime('-180 days')); break;
+                case '1-year': $cutoff = date('Y-m-d', strtotime('-365 days')); break;
+                case 'all-time':
+                default: $cutoff = null; break;
+            }
+
+            // Build query
+            $sql = "
+                SELECT log_date::date AS log_date, COUNT(*) AS breakout_count
+                FROM logs
+                WHERE user_id = :uid
+            ";
+
+            if ($cutoff) $sql .= " AND log_date >= :cutoff";
+            if (!empty($severity) && in_array($severity, ['Mild', 'Moderate', 'Severe'], true)) {
+                $sql .= " AND severity = :severity";
+            }
+
+            $sql .= " GROUP BY log_date::date ORDER BY log_date::date ASC";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+            if ($cutoff) $stmt->bindValue(':cutoff', $cutoff);
+            if (!empty($severity)) $stmt->bindValue(':severity', $severity);
+            $stmt->execute();
+
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode([
+                'success' => true,
+                'data' => $data
+            ]);
+        } catch (Throwable $e) {
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
         }
     }
 }
 
 if (php_sapi_name() !== 'cli' && isset($_GET['action'])) {
     $controller = new trends_controller();
-    $controller->dispatch($_GET['action'], $_GET);
+    $controller->dispatch($_GET['action'], $_POST);
 }

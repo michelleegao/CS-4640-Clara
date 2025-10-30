@@ -59,10 +59,10 @@ require_once __DIR__ . '/src/Database.php';
         <!--breakout severity filter-->
         <label for="severity">Severity</label>
         <select id="severity" name="severity">
+            <option value="">All</option>
             <option value="Mild">Mild</option>
             <option value="Moderate">Moderate</option>
             <option value="Severe">Severe</option>
-            <option value="">All</option>
         </select>
     </div>
 
