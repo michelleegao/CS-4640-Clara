@@ -79,11 +79,11 @@ require_once 'Database.php';
                         <div class="field-row">
                             <label for="where">Location</label>
                             <div class="pill-group" id="where">
-                                <label><input type="checkbox"> Face</label>
-                                <label><input type="checkbox"> Body</label>
-                                <label><input type="checkbox"> T-zone</label>
-                                <label><input type="checkbox"> Cheeks</label>
-                                <label><input type="checkbox"> Back</label>
+                                <label><input type="checkbox" name="locations[]" value="nose"> Nose</label>
+                                <label><input type="checkbox" name="locations[]" value="chin"> Chin</label>
+                                <label><input type="checkbox" name="locations[]" value="t-zone"> T-zone</label>
+                                <label><input type="checkbox" name="locations[]" value="cheeks"> Cheeks</label>
+                                <label><input type="checkbox" name="locations[]" value="back"> Back</label>
                             </div>
                         </div>
 
