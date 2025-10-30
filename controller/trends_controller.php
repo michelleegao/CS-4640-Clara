@@ -77,5 +77,5 @@ class trends_controller {
 
 if (php_sapi_name() !== 'cli' && isset($_GET['action'])) {
     $controller = new trends_controller();
-    $controller->dispatch($_GET['action'], $_POST);
+    $controller->dispatch($_GET['action'], $_GET);
 }
