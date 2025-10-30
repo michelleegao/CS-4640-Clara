@@ -66,11 +66,6 @@ require_once __DIR__ . '/src/Database.php';
         </select>
     </div>
 
-    <!-- Chart container
-    <div class="chart-container" style="width:80%; margin:auto; margin-top:40px;">
-        <canvas id="breakoutChart"></canvas>
-    </div> -->
-
     <section class="chart-section">
         <h3>Breakout Frequency Over Time</h3>
         <canvas id="breakoutChart" width="600" height="300"></canvas>
@@ -136,7 +131,7 @@ require_once __DIR__ . '/src/Database.php';
         // Load on page start
         loadTrends();
 
-        // Listen for filter changes
+        // Filter changes
         const rangeSelect = document.getElementById('date-range');
         if (rangeSelect) {
             rangeSelect.addEventListener('change', e => {
@@ -154,31 +149,5 @@ require_once __DIR__ . '/src/Database.php';
         }
     });
     </script>
-
-
-
-    <!--line graph-->
-    <!-- <div class="chart-container">
-        <div class="y-axis-name">Breakout Frequency</div>
-        <div class="y-axis-labels">
-            <div>10</div>
-            <div>8</div>
-            <div>6</div>
-            <div>4</div>
-            <div>2</div>
-            <div>0</div>
-        </div>
-        <div class="chart">
-            <div class="chart-grid"></div>
-            <div class="x-axis-labels">
-                <div>Sun</div>
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
-            </div>
-    </div> -->
 </body>
 </html>
