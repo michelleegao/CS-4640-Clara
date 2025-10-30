@@ -66,9 +66,9 @@ require_once __DIR__ . '/src/Database.php';
         </select>
     </div>
 
-    <section class="chart-section">
+    <section class="chart-fixed">
         <h3>Breakout Frequency Over Time</h3>
-        <canvas id="breakoutChart" width="600" height="300"></canvas>
+        <canvas id="breakoutChart"></canvas>
     </section>
 
 
@@ -86,11 +86,18 @@ require_once __DIR__ . '/src/Database.php';
 
         if (!result.success || !result.data) {
             console.warn('No trend data found:', result);
+            if (window.breakoutChart instanceof Chart) window.breakoutChart.destroy();
+            const ctx = document.getElementById('breakoutChart').getContext('2d');
+            window.breakoutChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: [], datasets: [{ data: [] }] },
+            options: { plugins: { legend: { display: false } } }
+            });
             return;
         }
 
-        const labels = result.data.map(item => item.log_date);
-        const counts = result.data.map(item => item.breakout_count);
+        const labels = result.data.map(r => r.log_date);
+        const counts = result.data.map(r => r.breakout_count);
 
         if (window.breakoutChart instanceof Chart) {
             window.breakoutChart.destroy();
