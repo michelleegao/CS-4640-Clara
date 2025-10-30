@@ -32,7 +32,7 @@ class log_controller {
 
         if ($errors) {
             $this->flash('Please fix: ' . implode(', ', array_keys($errors)));
-            header('Location: /daily_log.html');
+            header('Location: /daily_log.php');
             exit;
         }
 
@@ -53,7 +53,7 @@ class log_controller {
         ]);
 
         $this->flash('Log saved.');
-        header('Location: /daily_log.html');
+        header('Location: /daily_log.php');
         exit;
     }
 
@@ -61,7 +61,7 @@ class log_controller {
         $id = (int)($q['id'] ?? 0);
         if ($id <= 0) {
             $this->flash('Bad id.');
-            header('Location: /daily_log.html');
+            header('Location: /daily_log.php');
             exit;
         }
 
@@ -71,7 +71,7 @@ class log_controller {
         $stmt->execute([':id' => $id, ':uid' => $_SESSION['user_id']]);
 
         $this->flash('Log deleted.');
-        header('Location: /daily_log.html');
+        header('Location: /daily_log.php');
         exit;
     }
 

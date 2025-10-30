@@ -88,7 +88,7 @@ class login_controller {
         if ($user && password_verify($password, $user['password_hash'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['display_name'] = $user['display_name'];
-            header("Location: ../daily_log.html");
+            header("Location: ../daily_log.php");
             exit();
         } else {
             $_SESSION['error'] = "Incorrect email or password.";

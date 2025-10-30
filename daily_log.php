@@ -19,9 +19,9 @@ require_once 'Database.php';
         <nav class="navbar">
             <!-- Navigation Left -->
             <div class="nav-left">
-                <a href="daily_log.html" class="home-icon">🏠</a>
+                <a href="daily_log.php" class="home-icon">🏠</a>
                 <ul>
-                    <li><a href="daily_log.html" class="active">Log Today</a></li>
+                    <li><a href="daily_log.php" class="active">Log Today</a></li>
                     <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="current_routine.php">Current Routine</a></li>
                 </ul>
