@@ -1,4 +1,5 @@
 <?php
+// Authors: Henna Panjshiri
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

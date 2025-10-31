@@ -1,4 +1,5 @@
 <?php
+// Authors: Michelle Gao and Henna Panjshiri
 session_start();
 require_once __DIR__ . '/../src/Database.php';
 
