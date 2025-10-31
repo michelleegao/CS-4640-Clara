@@ -8,6 +8,7 @@ require_once __DIR__ . '/../src/Database.php';
 class trends_controller {
 
     public function dispatch(string $action, array $data = []): void {
+        // Check if user is logged in
         if (empty($_SESSION['user_id'])) {
             echo json_encode(['success' => false, 'error' => 'Please log in.']);
             return;
@@ -27,6 +28,7 @@ class trends_controller {
     private function json(array $q): void {
         header('Content-Type: application/json; charset=utf-8');
 
+        // Check if user is logged in
         $uid = $_SESSION['user_id'] ?? null;
         if (!$uid) {
             echo json_encode(['success' => false, 'error' => 'User not logged in.']);
@@ -39,7 +41,7 @@ class trends_controller {
         try {
             $pdo = Database::pdo();
 
-            // Determine cutoff date in PHP
+            // Determine cutoff date
             $cutoff = null;
             switch ($range) {
                 case '1-week': $cutoff = date('Y-m-d', strtotime('-7 days')); break;
@@ -50,7 +52,7 @@ class trends_controller {
                 default: $cutoff = null; break;
             }
 
-            // Build query
+            // Build query after filters have been applied
             $sql = "
                 SELECT log_date::date AS log_date, COUNT(*) AS breakout_count
                 FROM logs

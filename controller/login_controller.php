@@ -20,7 +20,7 @@ class login_controller {
         $password = trim($_POST['password'] ?? '');
         $errors = [];
 
-        // validation
+        // First name, last name, email, adn password validation
         if (!preg_match("/^[A-Za-z'-]+$/", $first)) {
             $errors[] = "First name can only contain letters, hyphens, or apostrophes.";
         }

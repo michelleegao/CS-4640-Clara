@@ -64,7 +64,7 @@ class log_controller {
             $clean['activity'] = null;
         }
 
-        // Water cups (numeric)
+        // Water cups
         $clean['water_cups'] = max(0, (int)($p['water_cups'] ?? 0));
 
         // Notes (optional)
@@ -79,6 +79,7 @@ class log_controller {
             exit;
         }
 
+        // Prepare SQL insert statements
         try {
             $sql = "INSERT INTO logs
                     (user_id, log_date, locations, severity, types, water_cups, activity, notes, created_at)
@@ -102,7 +103,7 @@ class log_controller {
         }
     }
 
-
+    // Function to delete log
     private function delete(array $q): void {
         header('Content-Type: application/json');
         $id = (int)($q['id'] ?? 0);

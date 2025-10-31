@@ -66,7 +66,6 @@ require_once __DIR__ . '/src/Database.php';
 
             <!-- Navigation Right -->
             <div class="nav-right">
-                <!-- <span>Hello, [Name!]</span> -->
                  <span>
                     <?php 
                         echo isset($_SESSION['display_name']) 
@@ -108,8 +107,7 @@ require_once __DIR__ . '/src/Database.php';
                     <button class="btn btn-primary wide">Log Breakouts today</button>
                 </div>
 
-                <!-- Breakout logging form (simple structure) -->
-                <!-- <form action="controller/log_controller.php?action=create" method="POST" class="log-form"> -->
+                <!-- Breakout logging form -->
                 <form id="logForm" class="log-form" aria-labelledby="log-title">
                     <h3 id="log-title">Breakout Log</h3>
 
@@ -172,7 +170,6 @@ require_once __DIR__ . '/src/Database.php';
                         <button class="btn btn-ghost" type="reset">Clear</button>
                     </div>
                 </form>
-                <!-- </form> -->
             </div>
 
             <script>
