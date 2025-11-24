@@ -303,88 +303,106 @@ require_once __DIR__ . '/src/Database.php';
     
     // dynamically update the dates of the logger
     let selectedDate = null;
+    let realToday = new Date();
 
     document.addEventListener("DOMContentLoaded", function () {
-        const today = new Date();
         const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         const hiddenDateInput = document.getElementById("log_date");
         const weekCard = document.querySelector(".week-card");
+        const weekCols = document.querySelectorAll(".week-col");
 
-        // fill in weekdays and dates for each column
-        document.querySelectorAll(".week-col").forEach((col, i) => {
-            // offset so current date is at the center/index 3
-            const offset = i - 3;
-            const date = new Date(today);
-            date.setDate(today.getDate() + offset);
+        function sameDay(d1, d2) {
+            return d1.getFullYear() === d2.getFullYear() &&
+                d1.getMonth() === d2.getMonth() &&
+                d1.getDate() === d2.getDate();
+        }
 
-            const iso = date.toISOString().split("T")[0];
+        // 7-day window around date in center
+        function renderWeek(baseDate) {
+            weekCols.forEach((col, i) => {
+                const offset = i - 3; 
+                const date = new Date(baseDate);
+                date.setDate(baseDate.getDate() + offset);
 
-            // weekday
-            const weekdaySpan = col.querySelector(".weekday");
-            weekdaySpan.textContent = weekdayNames[date.getDay()];
+                const iso = date.toISOString().split("T")[0];
 
-            // date
-            const dateButton = col.querySelector(".date-dot");
-            dateButton.textContent = date.getDate();
-            dateButton.dataset.dateValue = date.toISOString().split("T")[0];
+                const weekdaySpan = col.querySelector(".weekday");
+                const dateButton  = col.querySelector(".date-dot");
 
-            // apply stylistic changes to today's date/weekday
-            if (offset === 0) {
-                weekdaySpan.classList.add("today");
-                dateButton.classList.add("day-selected");
-                dateButton.setAttribute("aria-current", "date");
-                selectedDate = date;
-                if (hiddenDateInput) {
-                    hiddenDateInput.value = iso;
+                // weekday label
+                weekdaySpan.textContent = weekdayNames[date.getDay()];
+
+                // underline actual current day of real calendar
+                if (sameDay(date, realToday)) {
+                    weekdaySpan.classList.add("today");
+                } else {
+                    weekdaySpan.classList.remove("today");
                 }
+
+                // date circle
+                dateButton.textContent = date.getDate();
+                dateButton.dataset.dateValue = iso;
+
+                // visually mark the center as selected
+                if (offset === 0) {
+                    dateButton.classList.add("day-selected");
+                    dateButton.setAttribute("aria-current", "date");
+                } else {
+                    dateButton.classList.remove("day-selected");
+                    dateButton.removeAttribute("aria-current");
+                }
+            });
+
+            // also update hidden field for form submission
+            if (hiddenDateInput) {
+                hiddenDateInput.value = baseDate.toISOString().split("T")[0];
             }
-            // click handler for sliding + selecting date
-            dateButton.addEventListener("click", () => {
-                const newDateStr = dateButton.dataset.dateValue;
+        }
+
+        // initial state: today in the middle
+        selectedDate = new Date();  // clone of today
+        renderWeek(selectedDate);
+
+        // click handler (event delegation on the whole week grid)
+        const weekGrid = document.querySelector(".week-grid");
+        if (weekGrid) {
+            weekGrid.addEventListener("click", (evt) => {
+                const btn = evt.target.closest(".date-dot");
+                if (!btn) return;
+
+                const newDateStr = btn.dataset.dateValue;
+                if (!newDateStr) return;
+
                 const newDate = new Date(newDateStr);
 
-                if (selectedDate && newDate.getTime() === selectedDate.getTime()) {
-                    return; // clicking same date, nothing to do
-                }
+                // if same date, nothing to do
+                if (selectedDate && sameDay(newDate, selectedDate)) return;
 
-                // choose slide direction
-                if (selectedDate && weekCard) {
+                // optional: direction-based slide animation
+                if (weekCard) {
                     weekCard.classList.remove("slide-left", "slide-right");
-                    // force reflow so animation restarts
-                    void weekCard.offsetWidth;
+                    void weekCard.offsetWidth; // force reflow so animation restarts
 
-                    if (newDate > selectedDate) {
-                        weekCard.classList.add("slide-left");
-                    } else {
-                        weekCard.classList.add("slide-right");
+                    if (selectedDate && newDate > selectedDate) {
+                        weekCard.classList.add("slide-left");  // move forward in time
+                    } else if (selectedDate && newDate < selectedDate) {
+                        weekCard.classList.add("slide-right"); // move backward
                     }
                 }
 
+                // update selected date and re-render the 7-day window
                 selectedDate = newDate;
+                renderWeek(selectedDate);
+            });
 
-                // update which date dot is visually selected
-                document.querySelectorAll(".date-dot").forEach(btn => {
-                    btn.classList.remove("day-selected");
-                    btn.removeAttribute("aria-current");
+            // clean up slide class after animation finishes
+            if (weekCard) {
+                weekCard.addEventListener("animationend", () => {
+                    weekCard.classList.remove("slide-left", "slide-right");
                 });
-                dateButton.classList.add("day-selected");
-                dateButton.setAttribute("aria-current", "date");
-
-                // update hidden field so PHP saves for this date
-                if (hiddenDateInput) {
-                    hiddenDateInput.value = newDateStr;
-                }
-            });
-        });
-
-        // remove the slide class after animation so it can retrigger
-        if (weekCard) {
-            weekCard.addEventListener("animationend", () => {
-                weekCard.classList.remove("slide-left", "slide-right");
-            });
+            }
         }
     });
-
     // toggle sun and moon buttons
     document.addEventListener("DOMContentLoaded", () => {
         const sun  = document.getElementById("sun-icon");

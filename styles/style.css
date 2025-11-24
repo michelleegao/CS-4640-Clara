@@ -415,6 +415,8 @@ select:hover {
     padding: 16px;
     overflow: hidden; 
 }
+
+/* sliding animations */
 .week-card.slide-left {
     animation: slideLeft 0.25s ease-out;
 }
@@ -422,6 +424,7 @@ select:hover {
 .week-card.slide-right {
     animation: slideRight 0.25s ease-out;
 }
+
 @keyframes slideLeft {
     from { transform: translateX(30px); opacity: 0.4; }
     to   { transform: translateX(0);     opacity: 1;   }
