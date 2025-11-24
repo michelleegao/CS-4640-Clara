@@ -72,7 +72,16 @@ class log_controller {
         $clean['notes'] = trim($p['notes'] ?? '');
 
         // Log date
-        $clean['log_date'] = date('Y-m-d');
+        if (!empty($p['log_date'])) {
+            $d = DateTime::createFromFormat('Y-m-d', $p['log_date']);
+            if ($d === false) {
+                $errors['log_date'] = true;
+            } else {
+                $clean['log_date'] = $d->format('Y-m-d');
+            }
+        } else {
+            $clean['log_date'] = date('Y-m-d');
+        }
 
         // If validation failed
         if ($errors) {

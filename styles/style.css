@@ -432,7 +432,32 @@ select:hover {
 .left-col, .right-col { display: grid; gap: 24px; }
 
 /* ---------- Section ---------- */
-.week-card,
+.week-card {
+    background: #e7f0e7;
+    border: 1px solid #c9ddc9;
+    border-radius: 14px;
+    padding: 16px;
+    overflow: hidden; 
+}
+
+/* sliding animations */
+.week-grid.slide-left {
+    animation: slideLeft 0.25s ease-out;
+}
+
+.week-grid.slide-right {
+    animation: slideRight 0.25s ease-out;
+}
+
+@keyframes slideLeft {
+    from { transform: translateX(30px); opacity: 0.4; }
+    to   { transform: translateX(0);     opacity: 1;   }
+}
+
+@keyframes slideRight {
+    from { transform: translateX(-30px); opacity: 0.4; }
+    to   { transform: translateX(0);      opacity: 1;  }
+}
 .prompt-card,
 .log-form,
 .routine-card,
