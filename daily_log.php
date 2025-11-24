@@ -13,7 +13,7 @@ require_once __DIR__ . '/src/Database.php';
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Clara: Current Routine</title>
-    <link rel="stylesheet" href="styles/style.css?v=1">
+    <link rel="stylesheet" href="styles/style.css?v=3">
     <meta name="author" content="Henna Panjshiri, kew4bd">
     <style>
         .popup-message {
@@ -85,15 +85,35 @@ require_once __DIR__ . '/src/Database.php';
             <div class="left-col">
                 <!-- Weekly section -->
                 <div class="week-card">
-                    <div class="week-header">
-                        <span>Tue</span><span>Wed</span><span class="today">Thu</span><span>Fri</span><span>Sat</span>
-                    </div>
-                    <div class="week-dots">
-                        <button aria-label="12">12</button>
-                        <button aria-label="13">13</button>
-                        <button class="day-selected" aria-current="date" aria-label="14">14</button>
-                        <button aria-label="15">15</button>
-                        <button aria-label="16">16</button>
+                    <div class="week-grid">
+                        <div class="week-col">
+                            <span class="weekday" data-index="0"></span>
+                            <button class="date-dot" data-index="0"></button>
+                        </div>
+                        <div class="week-col">
+                            <span class="weekday" data-index="1"></span>
+                            <button class="date-dot" data-index="1"></button>
+                        </div>
+                        <div class="week-col">
+                            <span class="weekday" data-index="2"></span>
+                            <button class="date-dot" data-index="2"></button>
+                        </div>
+                        <div class="week-col">
+                            <span class="weekday" data-index="3"></span>
+                            <button class="date-dot" data-index="3"></button>
+                        </div>
+                        <div class="week-col">
+                            <span class="weekday" data-index="4"></span>
+                            <button class="date-dot" data-index="4"></button>
+                        </div>
+                        <div class="week-col">
+                            <span class="weekday" data-index="5"></span>
+                            <button class="date-dot" data-index="5"></button>
+                        </div>
+                        <div class="week-col">
+                            <span class="weekday" data-index="6"></span>
+                            <button class="date-dot" data-index="6"></button>
+                        </div>
                     </div>
                 </div>
 
@@ -172,49 +192,14 @@ require_once __DIR__ . '/src/Database.php';
                 </form>
             </div>
 
-            <script>
-                document.getElementById('logForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-
-                try {
-                    const response = await fetch('controller/log_controller.php?action=create', {
-                        method: 'POST',
-                        body: formData,
-                        credentials: 'include'
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        showPopup("Log successfully saved!");
-                        this.reset();
-                    } else {
-                        showPopup((result.error || "Failed to save log."));
-                    }
-                } catch (err) {
-                    showPopup("Network or server error.");
-                }
-            });
-
-            function showPopup(message) {
-                const popup = document.createElement('div');
-                popup.textContent = message;
-                popup.className = 'popup-message';
-                document.body.appendChild(popup);
-                setTimeout(() => popup.remove(), 3000);
-            }
-            </script>
-
 
             <!-- Right Column: Routine tracker -->
             <aside class="right-col">
                 <div class="routine-card">
                     <!-- Theme toggle (Sun / Moon) -->
                     <div class="theme-toggle" style="margin-bottom: 15px;">
-                        <img src="images/sun.png" alt="Sun Icon" class="theme-icon" style="width:40px;">
-                        <img src="images/moon.png" alt="Moon Icon" class="theme-icon" style="width:37px;">
+                        <img src="images/sun.png" alt="Sun Icon" id="sun-icon" class="theme-icon active" style="width:40px;">
+                        <img src="images/moon.png" alt="Moon Icon" id="moon-icon" class="theme-icon" style="width:37px;">
                     </div>
 
                     <!-- Morning Routine Section -->
@@ -280,5 +265,95 @@ require_once __DIR__ . '/src/Database.php';
             </aside>
         </section>
     </main>
+
+    <script>
+        document.getElementById('logForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch('controller/log_controller.php?action=create', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showPopup("Log successfully saved!");
+                this.reset();
+            } else {
+                showPopup((result.error || "Failed to save log."));
+            }
+        } catch (err) {
+            showPopup("Network or server error.");
+        }
+    });
+
+    function showPopup(message) {
+        const popup = document.createElement('div');
+        popup.textContent = message;
+        popup.className = 'popup-message';
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 3000);
+    }
+    
+    // dynamically update the dates of the logger
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date();
+        const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        // fill in weekdays and dates for each column
+        document.querySelectorAll(".week-col").forEach((col, i) => {
+            // offset so current date is at the center/index 3
+            const offset = i - 3;
+            const date = new Date(today);
+            date.setDate(today.getDate() + offset);
+
+            // weekday
+            const weekdaySpan = col.querySelector(".weekday");
+            weekdaySpan.textContent = weekdayNames[date.getDay()];
+
+            // date
+            const dateButton = col.querySelector(".date-dot");
+            dateButton.textContent = date.getDate();
+            dateButton.dataset.dateValue = date.toISOString().split("T")[0];
+
+            // apply stylistic changes to today's date/weekday
+            if (offset === 0) {
+                weekdaySpan.classList.add("today");
+                dateButton.classList.add("day-selected");
+                dateButton.setAttribute("aria-current", "date");
+            }
+        });
+    });
+
+    // toggle sun and moon buttons
+    document.addEventListener("DOMContentLoaded", () => {
+        const sun  = document.getElementById("sun-icon");
+        const moon = document.getElementById("moon-icon");
+
+        if (!sun || !moon) {
+            console.log("Sun or moon icons not found.");
+            return;
+        }
+
+        // START STATE
+        sun.classList.add("active");
+        moon.classList.remove("active");
+
+        sun.onclick = () => {
+            sun.classList.add("active");
+            moon.classList.remove("active");
+        };
+
+        moon.onclick = () => {
+            moon.classList.add("active");
+            sun.classList.remove("active");
+        };
+    });
+    </script>
 </body>
 </html>

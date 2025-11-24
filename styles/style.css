@@ -440,17 +440,74 @@ select:hover {
 .theme-icon {
     cursor: pointer;
     transition: opacity 0.3s;
+    opacity: 0.4;
+}
+
+.theme-icon.active {
     opacity: 1;
 }
 
-.week-header {
+.week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    gap: 0.6rem;
+    padding: 10px;
+}
+
+@media (max-width: 600px) {
+    .week-grid {
+        gap: 0.3rem;
+    }
+}
+
+.week-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.weekday {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.date-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #d6e8da;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.date-dot.day-selected {
+    background-color: #eaf7ef;
+    border-color: #7ca982;
+    font-weight: bold;
+}
+
+.weekday.today {
+    text-decoration: underline;
+}
+
+
+/* .week-header {
     display: flex;
     justify-content: space-between;
     font-weight: 600;
     color: #2f3e2f;
     margin-bottom: 8px;
 }
-.week-header .today { text-decoration: underline; }
+.week-header span.today {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #243e36;
+}
 
 
 .week-dots {
@@ -463,7 +520,11 @@ select:hover {
 }
 .week-dots .day-selected {
     background: #ffffff; box-shadow: 0 0 0 4px #d7e6d7 inset;
-}
+    /* border: 2px solid #7ca982;
+    background-color: #eaf7ef;
+    border-radius: 50%;
+    font-weight: bold; 
+} */
 
 
 /* ---------- Buttons ---------- */
