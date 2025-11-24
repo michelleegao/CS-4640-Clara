@@ -364,7 +364,6 @@ require_once __DIR__ . '/src/Database.php';
         renderWeek(selectedDate);
 
         // click handler (event delegation on the whole week grid)
-        const weekGrid = document.querySelector(".week-grid");
         if (weekGrid) {
             weekGrid.addEventListener("click", (evt) => {
                 const btn = evt.target.closest(".date-dot");
