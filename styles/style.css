@@ -417,11 +417,11 @@ select:hover {
 }
 
 /* sliding animations */
-.week-card.slide-left {
+.week-grid.slide-left {
     animation: slideLeft 0.25s ease-out;
 }
 
-.week-card.slide-right {
+.week-grid.slide-right {
     animation: slideRight 0.25s ease-out;
 }
 

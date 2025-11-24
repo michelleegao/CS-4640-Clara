@@ -308,7 +308,7 @@ require_once __DIR__ . '/src/Database.php';
     document.addEventListener("DOMContentLoaded", function () {
         const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         const hiddenDateInput = document.getElementById("log_date");
-        const weekCard = document.querySelector(".week-card");
+        const weekGrid = document.querySelector(".week-grid");
         const weekCols = document.querySelectorAll(".week-col");
 
         function sameDay(d1, d2) {
@@ -378,15 +378,14 @@ require_once __DIR__ . '/src/Database.php';
                 // if same date, nothing to do
                 if (selectedDate && sameDay(newDate, selectedDate)) return;
 
-                // optional: direction-based slide animation
-                if (weekCard) {
-                    weekCard.classList.remove("slide-left", "slide-right");
-                    void weekCard.offsetWidth; // force reflow so animation restarts
+                if (weekGrid) {
+                    weekGrid.classList.remove("slide-left", "slide-right");
+                    void weekGrid.offsetWidth;
 
                     if (selectedDate && newDate > selectedDate) {
-                        weekCard.classList.add("slide-left");  // move forward in time
+                        weekGrid.classList.add("slide-left");
                     } else if (selectedDate && newDate < selectedDate) {
-                        weekCard.classList.add("slide-right"); // move backward
+                        weekGrid.classList.add("slide-right");
                     }
                 }
 
@@ -396,9 +395,9 @@ require_once __DIR__ . '/src/Database.php';
             });
 
             // clean up slide class after animation finishes
-            if (weekCard) {
-                weekCard.addEventListener("animationend", () => {
-                    weekCard.classList.remove("slide-left", "slide-right");
+            if (weekGrid) {
+                weekGrid.addEventListener("animationend", () => {
+                    weekGrid.classList.remove("slide-left", "slide-right");
                 });
             }
         }
