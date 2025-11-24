@@ -302,9 +302,13 @@ require_once __DIR__ . '/src/Database.php';
     }
     
     // dynamically update the dates of the logger
+    let selectedDate = null;
+
     document.addEventListener("DOMContentLoaded", function () {
         const today = new Date();
         const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const hiddenDateInput = document.getElementById("log_date");
+        const weekCard = document.querySelector(".week-card");
 
         // fill in weekdays and dates for each column
         document.querySelectorAll(".week-col").forEach((col, i) => {
@@ -312,6 +316,8 @@ require_once __DIR__ . '/src/Database.php';
             const offset = i - 3;
             const date = new Date(today);
             date.setDate(today.getDate() + offset);
+
+            const iso = date.toISOString().split("T")[0];
 
             // weekday
             const weekdaySpan = col.querySelector(".weekday");
@@ -327,8 +333,56 @@ require_once __DIR__ . '/src/Database.php';
                 weekdaySpan.classList.add("today");
                 dateButton.classList.add("day-selected");
                 dateButton.setAttribute("aria-current", "date");
+                selectedDate = date;
+                if (hiddenDateInput) {
+                    hiddenDateInput.value = iso;
+                }
             }
+            // click handler for sliding + selecting date
+            dateButton.addEventListener("click", () => {
+                const newDateStr = dateButton.dataset.dateValue;
+                const newDate = new Date(newDateStr);
+
+                if (selectedDate && newDate.getTime() === selectedDate.getTime()) {
+                    return; // clicking same date, nothing to do
+                }
+
+                // choose slide direction
+                if (selectedDate && weekCard) {
+                    weekCard.classList.remove("slide-left", "slide-right");
+                    // force reflow so animation restarts
+                    void weekCard.offsetWidth;
+
+                    if (newDate > selectedDate) {
+                        weekCard.classList.add("slide-left");
+                    } else {
+                        weekCard.classList.add("slide-right");
+                    }
+                }
+
+                selectedDate = newDate;
+
+                // update which date dot is visually selected
+                document.querySelectorAll(".date-dot").forEach(btn => {
+                    btn.classList.remove("day-selected");
+                    btn.removeAttribute("aria-current");
+                });
+                dateButton.classList.add("day-selected");
+                dateButton.setAttribute("aria-current", "date");
+
+                // update hidden field so PHP saves for this date
+                if (hiddenDateInput) {
+                    hiddenDateInput.value = newDateStr;
+                }
+            });
         });
+
+        // remove the slide class after animation so it can retrigger
+        if (weekCard) {
+            weekCard.addEventListener("animationend", () => {
+                weekCard.classList.remove("slide-left", "slide-right");
+            });
+        }
     });
 
     // toggle sun and moon buttons
