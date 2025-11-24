@@ -129,6 +129,7 @@ require_once __DIR__ . '/src/Database.php';
 
                 <!-- Breakout logging form -->
                 <form id="logForm" class="log-form" aria-labelledby="log-title">
+                    <input type="hidden" name="log_date" id="log_date">
                     <h3 id="log-title">Breakout Log</h3>
 
                     <div class="field-row">
