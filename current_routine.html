@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="authors" content="Michelle Gao and Henna Panjshiri">
     <title>Clara: Current Routine</title>
-    <link rel="stylesheet" href="styles/style.css?v=2">
+    <link rel="stylesheet" href="styles/style.css?v=5">
 </head>
-  
+
 <body>
     <header>
         <nav class="navbar">
@@ -67,30 +67,49 @@
             <!--sub container for right side side-->
             <div class="right-products-inner">
                 <div class="product-search-bar">
-                    <input type="text" placeholder="🔍Find a product...">
-                    <span>Cleanser</span>
-                    <hr>
-                    <span>Toner</span>
-                    <hr>
-                    <span>Serum</span>
-                    <hr>
-                    <span>Moisturizer</span>
-                    <hr>
-                    <span>Sunscreen</span>
-                    <hr>
-                    <span>Spot treatment</span>
-                    <hr>
-                    <span>Face mask</span>
-                    <hr>
-                    <span>Exfoliator</span>
-                    <hr>
-                    <span>Eye cream</span>
+                    <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="🔍Find a product...">
+                    <ul id="productsUL">
+                        <li class="product-row">
+                            <span>Cleanser</span>
+                            <img src="images/add.png" alt="Add Icon" class="add-icon" data-product="Cleanser">
+                        </li>
+                        <hr>
+                        <li class="product-row">
+                            <span>Toner</span>
+                            <img src="images/add.png" alt="Add Icon" class="add-icon" data-product="Toner">
+                        </li>
+                        <hr>
+                        <li class="product-row">
+                            <span>Serum</span>
+                            <img src="images/add.png" alt="Add Icon" class="add-icon" data-product="Serum">
+                        </li>
+                        <hr>
+                        <li class="product-row">
+                            <span>Moisturizer</span>
+                            <img src="images/add.png" alt="Add Icon" class="add-icon" data-product="Moisturizer">
+                        </li>
+                        <hr>
+                        <li class="product-row">
+                            <span>Sunscreen</span>
+                            <img src="images/add.png" alt="Add Icon" class="add-icon" data-product="Sunscreen">
+                        </li>
+                        <hr>
+                        <li class="product-row">
+                            <span>Spot treatment</span>
+                            <img src="images/add.png" alt="Add Icon" class="add-icon" data-product="Spot treatment">
+                        </li>
+                        <hr>
+                        <li class="product-row">
+                            <span>Face mask</span>
+                            <img src="images/add.png" alt="Add Icon" class="add-icon" data-product="Face mask">
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     // toggle sun and moon buttons
     document.addEventListener("DOMContentLoaded", () => {
@@ -115,6 +134,149 @@
             moon.classList.add("active");
             sun.classList.remove("active");
         };
+    });
+
+    function searchFunction() {
+        let input = document.getElementById('myInput');
+        let filter = input.value.toUpperCase();
+        let ul = document.getElementById('productsUL');
+        let li = ul.getElementsByTagName('li');
+
+        // loop through list items, and hide those who don't match search query
+        for (i = 0; i < li.length; i++) {
+            txtSpan = li[i].getElementsByTagName("span")[0];
+            txtValue = txtSpan.textContent || txtSpan.innerText;
+            
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+                li[i].classList.add("highlight");
+            } else {
+                li[i].style.display = "none";
+                li[i].classList.remove("highlight");
+            }
+        }
+    }
+
+    // document.addEventListener("DOMContentLoaded", () => {
+    //     const productImages = {
+    //         "Cleanser": "images/cleanser.png",
+    //         "Lotion": "images/lotion.png",
+    //         "Toner": "images/toner.png",
+    //         "Face mask": "images/mask.png",
+    //         "Spot Treatment": "images/treatment.png"
+    //     };
+
+    //     const rightList = document.getElementById("productsUL");
+    //     const leftContainer = document.querySelector(".products-list");
+
+    //     rightList.addEventListener("click", function(e) {
+    //         if (e.target.classList.contains("add-icon")) {
+
+    //             const productName = e.target.dataset.product;
+
+    //             // remove from right list
+    //             e.target.parentElement.remove();
+
+    //             // create new product block on the left side
+    //             const newItem = document.createElement("div");
+    //             newItem.classList.add("product-item");
+
+    //             newItem.innerHTML = `
+    //                 <img class="product-rect" src="images/${productName}.png" alt="${productName}" style="width:200px">
+    //                 <label>${productName}</label>
+    //                 <input type="checkbox" class="product-checkbox">
+    //             `;
+
+    //             leftContainer.appendChild(newItem);
+    //         }
+    //     });
+
+    // });
+
+    $(document).ready(function () {
+
+        // ---------------------------------------------
+        // 1. JAVASCRIPT OBJECT (Requirement #1)
+        // ---------------------------------------------
+        let routineManager = {
+            addedProducts: [],    // store products added to left panel
+
+            addProduct(product) {
+                this.addedProducts.push(product);
+            },
+
+            removeProduct(name) {
+                this.addedProducts = this.addedProducts.filter(p => p.name !== name);
+            }
+        };
+
+        // ---------------------------------------------
+        // 2. AJAX LOAD PRODUCTS FROM PHP (Requirement #3)
+        // ---------------------------------------------
+        $.ajax({
+            url: "controller/get_products.php",
+            method: "GET",
+            dataType: "json",
+            success: function(products) {
+
+                // Populate the right-side product list
+                let ul = $("#productsUL");
+                ul.empty();
+
+                products.forEach(product => {
+                    ul.append(`
+                        <li class="product-row">
+                            <span>${product.name}</span>
+                            <img src="images/plus.png" 
+                                class="add-icon" 
+                                data-product='${JSON.stringify(product)}'>
+                        </li>
+                    `);
+                });
+            }
+        });
+
+        // ---------------------------------------------
+        // 3. jQuery EVENT HANDLER (Requirement #2)
+        // Clicking the "+" button adds the product to left side
+        // ---------------------------------------------
+        $("#productsUL").on("click", ".add-icon", function () {
+
+            let product = JSON.parse($(this).attr("data-product"));
+
+            // Update JavaScript object
+            routineManager.addProduct(product);
+
+            // Remove from right-side list
+            $(this).closest("li").remove();
+
+            // Add to the left-side container
+            $(".products-list").append(`
+                <div class="product-item">
+                    <img class="product-rect" src="${product.image}" alt="${product.name}" style="width:200px">
+                    <label>${product.name}</label>
+                    <input type="checkbox" class="product-checkbox">
+                </div>
+            `);
+        });
+
+        // ---------------------------------------------
+        // 4. SEARCH FUNCTION (still works, optional jQuery)
+        // ---------------------------------------------
+        window.searchFunction = function() {
+            let filter = $("#myInput").val().toUpperCase();
+
+            $("#productsUL li").each(function () {
+                let txtValue = $(this).find("span").text().toUpperCase();
+
+                if (txtValue.indexOf(filter) > -1) {
+                    $(this).show().addClass("highlight");
+                } else {
+                    $(this).hide().removeClass("highlight");
+                }
+            });
+        };
+
     });
     </script>
 </body>

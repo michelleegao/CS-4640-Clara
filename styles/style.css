@@ -390,6 +390,30 @@ select:hover {
   }
 }
 
+.product-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+}
+
+.add-icon {
+    width: 22px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.add-icon:hover {
+    opacity: 1;
+}
+
+#productsUL {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
 /* ---------- Daily Logger Page layout ---------- */
 .page {
     background: #eef5ee;
