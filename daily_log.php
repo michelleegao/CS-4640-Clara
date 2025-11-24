@@ -270,6 +270,25 @@ require_once __DIR__ . '/src/Database.php';
     <script>
         document.getElementById('logForm').addEventListener('submit', async function(e) {
         e.preventDefault();
+        
+        // client-side validation
+        let hasError = false;
+
+        const severity = document.getElementById('severity').value;
+        if (!severity) {
+            showPopup("Select a severity level.");
+            hasError = true;
+        }
+
+        const anyLocationChecked = !!document.querySelector('input[name="locations[]"]:checked');
+        const anyTypeChecked     = !!document.querySelector('input[name="types[]"]:checked');
+
+        if (!anyLocationChecked && !anyTypeChecked) {
+            showPopup("Select at least one location/type for your breakout.");
+            hasError = true;
+        }
+
+        if (hasError) return;
 
         const formData = new FormData(this);
 
