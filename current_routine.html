@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="authors" content="Michelle Gao and Henna Panjshiri">
     <title>Clara: Current Routine</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/style.css?v=2">
 </head>
   
 <body>
@@ -33,8 +33,8 @@
         <div class="left-products-container">
             
             <!--daytime nighttime icons-->
-            <img class="product-icons" src="images/sun.png" alt="Sun Icon" style="width:40px">
-            <img class="product-icons" src="images/moon.png" alt="Moon Icon" style="width:37px">
+            <img class="product-icons theme-icon active" src="images/sun.png" id="sun-icon" alt="Sun Icon" style="width:40px">
+            <img class="product-icons theme-icon" src="images/moon.png" id="moon-icon" alt="Moon Icon" style="width:37px">
             <hr style="position: relative; top: 20px; height: 3px; color: #243e36; background-color: #243e36">
             
             <!--sub container for left side-->
@@ -70,19 +70,52 @@
                     <input type="text" placeholder="🔍Find a product...">
                     <span>Cleanser</span>
                     <hr>
-                    <span>Lotion</span>
-                    <hr>
                     <span>Toner</span>
                     <hr>
-                    <span>Spot Treatment</span>
+                    <span>Serum</span>
+                    <hr>
+                    <span>Moisturizer</span>
+                    <hr>
+                    <span>Sunscreen</span>
+                    <hr>
+                    <span>Spot treatment</span>
                     <hr>
                     <span>Face mask</span>
                     <hr>
-                    <span>More...</span>
+                    <span>Exfoliator</span>
+                    <hr>
+                    <span>Eye cream</span>
                 </div>
             </div>
         </div>
 
     </div>
+
+    <script>
+    // toggle sun and moon buttons
+    document.addEventListener("DOMContentLoaded", () => {
+        const sun  = document.getElementById("sun-icon");
+        const moon = document.getElementById("moon-icon");
+
+        if (!sun || !moon) {
+            console.log("Sun or moon icons not found.");
+            return;
+        }
+
+        // START STATE
+        sun.classList.add("active");
+        moon.classList.remove("active");
+
+        sun.onclick = () => {
+            sun.classList.add("active");
+            moon.classList.remove("active");
+        };
+
+        moon.onclick = () => {
+            moon.classList.add("active");
+            sun.classList.remove("active");
+        };
+    });
+    </script>
 </body>
 </html>
