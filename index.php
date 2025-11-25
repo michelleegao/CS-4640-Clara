@@ -52,5 +52,6 @@ if (isset($_SESSION['error'])) {
                 <a href="sign_up.php" class="login-btn">Sign Up</a>
             </form>
         </div>
+    </div>
 </body>
 </html>
