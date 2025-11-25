@@ -119,9 +119,7 @@ require_once __DIR__ . '/src/Database.php';
     // global variable for morning/night mode
     let routineTime = "Morning";
 
-    /* -------------------------------------------
-    Load morning/night routine items (LEFT SIDE)
-    -------------------------------------------- */
+    // load left-side routine items (morning/night)
     function loadRoutineItems() {
         $.ajax({
             url: "controller/get_routine.php",
@@ -137,14 +135,19 @@ require_once __DIR__ . '/src/Database.php';
                     return;
                 }
 
-                // Clear left-side grid
+                // clear left-side grid
                 $(".products-list").empty();
 
                 items.forEach(item => {
                     $(".products-list").append(`
-                        <div class="product-item">
+                        <div class="product-item" data-product-type="${item.product_type}">
                             <img class="product-rect" src="images/${item.product_type.replace(' ', '_')}.png">
                             <label class="product-label">${item.name}</label>
+
+                            <!-- hidden until edit mode -->
+                            <button class="remove-btn" data-type="${item.product_type}">
+                                -
+                            </button>
                         </div>
                     `);
                 });
@@ -152,59 +155,7 @@ require_once __DIR__ . '/src/Database.php';
         });
     }
 
-    /* -------------------------------------------
-    Toggle Sun/Moon + Reload Routine
-    -------------------------------------------- */
-    document.addEventListener("DOMContentLoaded", () => {
-        const sun  = document.getElementById("sun-icon");
-        const moon = document.getElementById("moon-icon");
-
-        function activateMorning() {
-            routineTime = "Morning";
-            sun.classList.add("active");
-            moon.classList.remove("active");
-            loadRoutineItems();
-            loadProductList();
-        }
-
-        function activateNight() {
-            routineTime = "Night";
-            moon.classList.add("active");
-            sun.classList.remove("active");
-            loadRoutineItems();
-            loadProductList();
-        }
-
-        activateMorning(); // initial load
-        sun.onclick = () => activateMorning();
-        moon.onclick = () => activateNight();
-    });
-
-    /* -------------------------------------------
-    Search filter (unchanged)
-    -------------------------------------------- */
-    function searchFunction() {
-        let input = document.getElementById('myInput');
-        let filter = input.value.toUpperCase();
-        let ul = document.getElementById('productsUL');
-        let li = ul.getElementsByTagName('li');
-
-        for (i = 0; i < li.length; i++) {
-            txtSpan = li[i].getElementsByTagName("span")[0];
-            txtValue = txtSpan.textContent || txtSpan.innerText;
-            
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                li[i].style.display = "";
-            } else {
-                li[i].style.display = "none";
-            }
-        }
-    }
-
-    /* -------------------------------------------
-    Load RIGHT-SIDE PRODUCT LIST
-    (Hide items already saved in routine)
-    -------------------------------------------- */
+    // load right side product list (hide products if already in database)
     function loadProductList() {
         $.ajax({
             url: "controller/routine_controller.php",
@@ -232,36 +183,106 @@ require_once __DIR__ . '/src/Database.php';
         });
     }
 
-    /* -------------------------------------------
-    Document Ready
-    -------------------------------------------- */
+    // toggle sun and moon
+    document.addEventListener("DOMContentLoaded", () => {
+        const sun  = document.getElementById("sun-icon");
+        const moon = document.getElementById("moon-icon");
+
+        function activateMorning() {
+            routineTime = "Morning";
+            sun.classList.add("active");
+            moon.classList.remove("active");
+            loadRoutineItems();
+            loadProductList();
+        }
+
+        function activateNight() {
+            routineTime = "Night";
+            moon.classList.add("active");
+            sun.classList.remove("active");
+            loadRoutineItems();
+            loadProductList();
+        }
+
+        activateMorning(); // initial load
+        sun.onclick = () => activateMorning();
+        moon.onclick = () => activateNight();
+    });
+
+    // search filter
+    function searchFunction() {
+        let input = document.getElementById('myInput');
+        let filter = input.value.toUpperCase();
+        let ul = document.getElementById('productsUL');
+        let li = ul.getElementsByTagName('li');
+
+        for (let i = 0; i < li.length; i++) {
+            let txtSpan = li[i].getElementsByTagName("span")[0];
+            let txtValue = txtSpan.textContent || txtSpan.innerText;
+            
+            li[i].style.display = (txtValue.toUpperCase().indexOf(filter) > -1)
+                ? ""
+                : "none";
+        }
+    }
+
+    // document ready
     $(document).ready(function () {
 
-        loadRoutineItems();   // left side
-        loadProductList();    // right side
+        // toggle edit mode
+        let editMode = false;
 
-        /* ---------------- add products to routine ---------------- */
+        $(".edit-btn").on("click", function () {
+            editMode = !editMode;
+
+            if (editMode) {
+                $(".products-list").addClass("edit-mode");
+                $(".edit-btn span").text("Done");
+            } else {
+                $(".products-list").removeClass("edit-mode");
+                $(".edit-btn span").text("Edit");
+            }
+        });
+
+        // initial loads
+        loadRoutineItems();
+        loadProductList();
+
+        // add products to routine
         $("#productsUL").on("click", ".add-icon", function () {
             let product = JSON.parse($(this).attr("data-product"));
 
             $.ajax({
-                url: "controller/save_routine.php",
+                url: "controller/update_routine.php", // reactivate instead of insert
                 method: "POST",
                 dataType: "json",
                 data: {
-                    name: product.name,
-                    type: product.type,
-                    time_of_day: routineTime
+                    product_type: product.type,
+                    time_of_day: routineTime,
+                    active: true
                 },
                 success: function(res) {
-                    console.log("Save response:", res);
+                    // Reload both sides
+                    loadRoutineItems();
+                    loadProductList();
+                }
+            });
+        });
 
-                    if (res.error === "duplicate") {
-                        alert("This product is already in your routine.");
-                        return;
-                    }
+        // remove product from routine
+        $(".products-list").on("click", ".remove-btn", function () {
+            const productType = $(this).data("type");
 
-                    // reload both sides from DB so UI matches current time (Morning/Night)
+            $.ajax({
+                url: "controller/update_routine.php",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    product_type: productType,
+                    time_of_day: routineTime,
+                    active: false
+                },
+                success: function(res) {
                     loadRoutineItems();
                     loadProductList();
                 }
