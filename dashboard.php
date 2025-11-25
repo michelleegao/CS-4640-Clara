@@ -68,7 +68,7 @@ require_once __DIR__ . '/src/Database.php';
 
     <section class="chart-fixed">
         <h3>Breakout Frequency Over Time</h3>
-        <canvas id="breakoutChart"></canvas>
+        <canvas id="breakoutChart" aria-label="Line chart showing breakout frequency over time." role="img"></canvas>
     </section>
 
 
@@ -123,6 +123,7 @@ require_once __DIR__ . '/src/Database.php';
             options: {
             responsive: true,
             maintainAspectRatio: false,
+            events: [],
             scales: {
                 x: { title: { display: true, text: 'Date' } },
                 y: { title: { display: true, text: 'Breakout Count' }, beginAtZero: true }
