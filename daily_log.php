@@ -118,7 +118,7 @@ require_once __DIR__ . '/src/Database.php';
                 </div>
 
                 <!-- Breakout logging form -->
-                <form id="logForm" class="log-form" aria-labelledby="log-title">
+                <form id="logForm" class="log-form hidden" aria-labelledby="log-title">
                     <input type="hidden" name="log_date" id="log_date">
                     <h3 id="log-title">Breakout Log</h3>
 
@@ -193,7 +193,7 @@ require_once __DIR__ . '/src/Database.php';
                         <button class="btn btn-secondary">I did my Morning routine</button>
                         <button class="btn btn-secondary">I did my Night routine</button>
                     </div>
-                    <button class="btn btn-primary wide">Log Breakouts today</button>
+                    <button id="show-log-btn" class="btn btn-primary wide">Log Breakouts today</button>
                 </div>
             </aside>
         </section>
@@ -202,9 +202,18 @@ require_once __DIR__ . '/src/Database.php';
     <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-        /* submit handler for breakout log */
         const form = document.getElementById('logForm');
         if (!form) return;
+
+        const showLogBtn = document.getElementById('show-log-btn');
+        if (showLogBtn) {
+            showLogBtn.addEventListener('click', () => {
+                form.classList.remove('hidden');
+
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();

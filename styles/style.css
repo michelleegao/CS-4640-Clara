@@ -517,6 +517,10 @@ select:hover {
     padding: 16px;
 }
 
+.hidden {
+    display: none;
+}
+
 .prompt-card { background: #7a8477; color: #f2f5f2; }
 .prompt-card h3 { font-weight: 700; margin-bottom: 12px; }
 .prompt-actions { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
