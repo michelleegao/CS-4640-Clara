@@ -117,16 +117,6 @@ require_once __DIR__ . '/src/Database.php';
                     </div>
                 </div>
 
-                <!-- Prompt section -->
-                <div class="prompt-card">
-                    <h3>What Skincare did you do today?</h3>
-                    <div class="prompt-actions">
-                        <button class="btn btn-secondary">I did my Morning routine</button>
-                        <button class="btn btn-secondary">I did my Night routine</button>
-                    </div>
-                    <button class="btn btn-primary wide">Log Breakouts today</button>
-                </div>
-
                 <!-- Breakout logging form -->
                 <form id="logForm" class="log-form" aria-labelledby="log-title">
                     <input type="hidden" name="log_date" id="log_date">
@@ -196,72 +186,14 @@ require_once __DIR__ . '/src/Database.php';
 
             <!-- Right Column: Routine tracker -->
             <aside class="right-col">
-                <div class="routine-card">
-                    <!-- Theme toggle (Sun / Moon) -->
-                    <div class="theme-toggle" style="margin-bottom: 15px;">
-                        <img src="images/sun.png" alt="Sun Icon" id="sun-icon" class="theme-icon active" style="width:40px;">
-                        <img src="images/moon.png" alt="Moon Icon" id="moon-icon" class="theme-icon" style="width:37px;">
+                <!-- Prompt section -->
+                <div class="prompt-card">
+                    <h3>What Skincare did you do today?</h3>
+                    <div class="prompt-actions">
+                        <button class="btn btn-secondary">I did my Morning routine</button>
+                        <button class="btn btn-secondary">I did my Night routine</button>
                     </div>
-
-                    <!-- Morning Routine Section -->
-                    <div class="routine-section">
-                        <div class="routine-header">
-                            <div class="checks">
-                                <label><input type="checkbox"> All</label>
-                                <label><input type="checkbox"> None</label>
-                            </div>
-                        </div>
-
-                        <ul class="product-grid">
-                            <li>
-                                <div class="product-ghost"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost tall"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost short"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <!-- Night Routine Section -->
-                    <div class="routine-section">
-                        <div class="routine-header">
-                            <div class="checks">
-                                <label><input type="checkbox"> All</label>
-                                <label><input type="checkbox"> None</label>
-                            </div>
-                        </div>
-
-                        <ul class="product-grid">
-                            <li>
-                                <div class="product-ghost tall"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost short"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                        </ul>
-                    </div>
+                    <button class="btn btn-primary wide">Log Breakouts today</button>
                 </div>
             </aside>
         </section>
