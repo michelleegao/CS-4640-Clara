@@ -77,32 +77,38 @@ require_once __DIR__ . '/src/Database.php';
                             <span>Cleanser</span>
                             <img src="images/add.png" alt="Add Icon" class="add-icon" data-product='{"name":"Cleanser","image":"images/cleanser.png", "type":"cleanser"}'>
                         </li>
-                        <hr>
+                        <li class="divider-li"></li>
+
                         <li class="product-row">
                             <span>Toner</span>
                             <img src="images/add.png" alt="Add Icon" class="add-icon" data-product='{"name":"Toner","image":"images/toner.png", "type":"toner"}'>
                         </li>
-                        <hr>
+                        <li class="divider-li"></li>
+
                         <li class="product-row">
                             <span>Serum</span>
                             <img src="images/add.png" alt="Add Icon" class="add-icon" data-product='{"name":"Serum","image":"images/serum.png", "type":"serum"}'>
                         </li>
-                        <hr>
+                        <li class="divider-li"></li>
+
                         <li class="product-row">
                             <span>Moisturizer</span>
                             <img src="images/add.png" alt="Add Icon" class="add-icon" data-product='{"name":"Moisturizer","image":"images/moisturizer.png", "type":"moisturizer"}'>
                         </li>
-                        <hr>
+                        <li class="divider-li"></li>
+
                         <li class="product-row">
                             <span>Sunscreen</span>
                             <img src="images/add.png" alt="Add Icon" class="add-icon" data-product='{"name":"Sunscreen","image":"images/sunscreen.png", "type":"sunscreen"}'>
                         </li>
-                        <hr>
+                        <li class="divider-li"></li>
+
                         <li class="product-row">
                             <span>Spot treatment</span>
                             <img src="images/add.png" alt="Add Icon" class="add-icon" data-product='{"name":"Spot Treatment","image":"images/spot_treatment.png", "type":"spot treatment"}'>
                         </li>
-                        <hr>
+                        <li class="divider-li"></li>
+                        
                         <li class="product-row">
                             <span>Face mask</span>
                             <img src="images/add.png" alt="Add Icon" class="add-icon" data-product='{"name":"Face mask","image":"images/face_mask.png", "type":"face mask"}'>

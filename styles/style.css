@@ -297,6 +297,12 @@ select:hover {
     box-sizing: border-box;
 }
 
+.divider-li {
+    list-style: none;
+    border-bottom: 1px solid #c9ddc9;
+    margin: 10px 0;
+}
+
 .product-icons:hover {
     cursor: pointer;
 }

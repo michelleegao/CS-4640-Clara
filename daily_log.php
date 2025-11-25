@@ -123,7 +123,7 @@ require_once __DIR__ . '/src/Database.php';
                     <h3 id="log-title">Breakout Log</h3>
 
                     <div class="field-row">
-                        <label for="where">Location</label>
+                        <label>Location</label>
                         <div class="pill-group" id="where">
                             <label><input type="checkbox" name="locations[]" value="nose"> Nose</label>
                             <label><input type="checkbox" name="locations[]" value="chin"> Chin</label>
@@ -144,7 +144,7 @@ require_once __DIR__ . '/src/Database.php';
                     </div>
 
                     <div class="field-row">
-                        <label for="type">Type</label>
+                        <label>Type</label>
                         <div class="pill-group" id="type">
                             <label><input type="checkbox" name="types[]" value="whiteheads"> Whiteheads</label>
                             <label><input type="checkbox" name="types[]" value="blackheads"> Blackheads</label>
@@ -163,10 +163,10 @@ require_once __DIR__ . '/src/Database.php';
                             <label for="activity">Habits/Activity</label>
                             <select id="activity">
                                 <option>Select</option>
-                                <option name="activity[]" value="workout">Workout</option>
-                                <option name="activity[]" value="high stress">High stress</option>
-                                <option name="activity[]" value="good sleep">Good sleep</option>
-                                <option name="activity[]" value="new product">New product</option>
+                                <option value="workout">Workout</option>
+                                <option value="high stress">High stress</option>
+                                <option value="good sleep">Good sleep</option>
+                                <option value="new product">New product</option>
                             </select>
                         </div>
                     </div>
