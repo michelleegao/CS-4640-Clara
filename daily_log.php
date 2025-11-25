@@ -268,63 +268,73 @@ require_once __DIR__ . '/src/Database.php';
     </main>
 
     <script>
-        document.getElementById('logForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        // client-side validation
-        let hasError = false;
+    document.addEventListener('DOMContentLoaded', () => {
 
-        const severity = document.getElementById('severity').value;
-        if (!severity) {
-            showPopup("Select a severity level.");
-            hasError = true;
-        }
+        /* submit handler for breakout log */
+        const form = document.getElementById('logForm');
+        if (!form) return;
 
-        const anyLocationChecked = !!document.querySelector('input[name="locations[]"]:checked');
-        const anyTypeChecked     = !!document.querySelector('input[name="types[]"]:checked');
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-        if (!anyLocationChecked && !anyTypeChecked) {
-            showPopup("Select at least one location/type for your breakout.");
-            hasError = true;
-        }
+            // client-side validation
+            let hasError = false;
 
-        if (hasError) return;
-
-        const formData = new FormData(this);
-
-        try {
-            const response = await fetch('controller/log_controller.php?action=create', {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                showPopup("Log successfully saved!");
-                this.reset();
-            } else {
-                showPopup((result.error || "Failed to save log."));
+            const severity = document.getElementById('severity').value;
+            if (!severity) {
+                showPopup("Select a severity level.");
+                hasError = true;
             }
-        } catch (err) {
-            showPopup("Network or server error.");
+
+            const anyLocationChecked = !!document.querySelector('input[name="locations[]"]:checked');
+            const anyTypeChecked     = !!document.querySelector('input[name="types[]"]:checked');
+
+            if (!anyLocationChecked) {
+                showPopup("Select at least one location for your breakout.");
+                hasError = true;
+            }
+
+            if (!anyTypeChecked) {
+                showPopup("Select at least one type for your breakout.");
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('controller/log_controller.php?action=create', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showPopup("Log successfully saved!");
+                    this.reset();
+                } else {
+                    showPopup(result.error || "Failed to save log.");
+                }
+            } catch (err) {
+                showPopup("Network or server error.");
+            }
+        });
+
+        function showPopup(message) {
+            const popup = document.createElement('div');
+            popup.textContent = message;
+            popup.className = 'popup-message';
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 3000);
         }
-    });
 
-    function showPopup(message) {
-        const popup = document.createElement('div');
-        popup.textContent = message;
-        popup.className = 'popup-message';
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 3000);
-    }
-    
-    // dynamically update the dates of the logger
-    let selectedDate = null;
-    let realToday = new Date();
+        /* week slider */
+        let selectedDate = null;
+        let realToday = new Date();
 
-    document.addEventListener("DOMContentLoaded", function () {
         const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         const hiddenDateInput = document.getElementById("log_date");
         const weekGrid = document.querySelector(".week-grid");
@@ -336,10 +346,9 @@ require_once __DIR__ . '/src/Database.php';
                 d1.getDate() === d2.getDate();
         }
 
-        // 7-day window around date in center
         function renderWeek(baseDate) {
             weekCols.forEach((col, i) => {
-                const offset = i - 3; 
+                const offset = i - 3;
                 const date = new Date(baseDate);
                 date.setDate(baseDate.getDate() + offset);
 
@@ -351,7 +360,7 @@ require_once __DIR__ . '/src/Database.php';
                 // weekday label
                 weekdaySpan.textContent = weekdayNames[date.getDay()];
 
-                // underline actual current day of real calendar
+                // underline current real date
                 if (sameDay(date, realToday)) {
                     weekdaySpan.classList.add("today");
                 } else {
@@ -362,7 +371,7 @@ require_once __DIR__ . '/src/Database.php';
                 dateButton.textContent = date.getDate();
                 dateButton.dataset.dateValue = iso;
 
-                // visually mark the center as selected
+                // selected (middle)
                 if (offset === 0) {
                     dateButton.classList.add("day-selected");
                     dateButton.setAttribute("aria-current", "date");
@@ -372,77 +381,60 @@ require_once __DIR__ . '/src/Database.php';
                 }
             });
 
-            // also update hidden field for form submission
-            if (hiddenDateInput) {
-                hiddenDateInput.value = baseDate.toISOString().split("T")[0];
-            }
+            hiddenDateInput.value = baseDate.toISOString().split("T")[0];
         }
 
-        // initial state: today in the middle
-        selectedDate = new Date();  // clone of today
+        selectedDate = new Date();
         renderWeek(selectedDate);
 
-        // click handler (event delegation on the whole week grid)
         if (weekGrid) {
             weekGrid.addEventListener("click", (evt) => {
                 const btn = evt.target.closest(".date-dot");
                 if (!btn) return;
 
                 const newDateStr = btn.dataset.dateValue;
-                if (!newDateStr) return;
-
                 const newDate = new Date(newDateStr);
 
-                // if same date, nothing to do
-                if (selectedDate && sameDay(newDate, selectedDate)) return;
+                if (sameDay(newDate, selectedDate)) return;
 
-                if (weekGrid) {
-                    weekGrid.classList.remove("slide-left", "slide-right");
-                    void weekGrid.offsetWidth;
+                // animation direction
+                weekGrid.classList.remove("slide-left", "slide-right");
+                void weekGrid.offsetWidth;
 
-                    if (selectedDate && newDate > selectedDate) {
-                        weekGrid.classList.add("slide-left");
-                    } else if (selectedDate && newDate < selectedDate) {
-                        weekGrid.classList.add("slide-right");
-                    }
+                if (newDate > selectedDate) {
+                    weekGrid.classList.add("slide-left");
+                } else {
+                    weekGrid.classList.add("slide-right");
                 }
 
-                // update selected date and re-render the 7-day window
+                // update center date
                 selectedDate = newDate;
                 renderWeek(selectedDate);
             });
 
-            // clean up slide class after animation finishes
-            if (weekGrid) {
-                weekGrid.addEventListener("animationend", () => {
-                    weekGrid.classList.remove("slide-left", "slide-right");
-                });
-            }
+            weekGrid.addEventListener("animationend", () => {
+                weekGrid.classList.remove("slide-left", "slide-right");
+            });
         }
-    });
-    // toggle sun and moon buttons
-    document.addEventListener("DOMContentLoaded", () => {
+
+        /* sun/moon toggle */
         const sun  = document.getElementById("sun-icon");
         const moon = document.getElementById("moon-icon");
 
-        if (!sun || !moon) {
-            console.log("Sun or moon icons not found.");
-            return;
-        }
-
-        // START STATE
-        sun.classList.add("active");
-        moon.classList.remove("active");
-
-        sun.onclick = () => {
+        if (sun && moon) {
             sun.classList.add("active");
             moon.classList.remove("active");
-        };
 
-        moon.onclick = () => {
-            moon.classList.add("active");
-            sun.classList.remove("active");
-        };
+            sun.onclick = () => {
+                sun.classList.add("active");
+                moon.classList.remove("active");
+            };
+
+            moon.onclick = () => {
+                moon.classList.add("active");
+                sun.classList.remove("active");
+            };
+        }
     });
     </script>
 </body>
