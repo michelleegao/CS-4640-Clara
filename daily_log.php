@@ -60,7 +60,7 @@ require_once __DIR__ . '/src/Database.php';
                 <ul>
                     <li><a href="daily_log.php" class="active">Log Today</a></li>
                     <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="current_routine.html">Current Routine</a></li>
+                    <li><a href="current_routine.php">Current Routine</a></li>
                 </ul>
             </div>
 

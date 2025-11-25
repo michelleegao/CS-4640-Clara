@@ -35,8 +35,7 @@ CREATE TABLE routine_products (
     -- enforce allowed types:
     product_type TEXT NOT NULL CHECK (
         product_type IN (
-            'cleanser','moisturizer','lotion','serum','toner',
-            'sunscreen','retinoid','retinol'
+            'cleanser','toner','serum', 'moisturizer', 'sunscreen', 'spot treatment','face mask'
         )
     ),
 
