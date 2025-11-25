@@ -116,12 +116,13 @@ require_once __DIR__ . '/src/Database.php';
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-    // GLOBAL variable for morning/night mode
+    // global variable for morning/night mode
     let routineTime = "Morning";
 
-    // GLOBAL FUNCTION: Load morning/night routine items into left panel
+    /* -------------------------------------------
+    Load morning/night routine items (LEFT SIDE)
+    -------------------------------------------- */
     function loadRoutineItems() {
-
         $.ajax({
             url: "controller/get_routine.php",
             method: "GET",
@@ -130,20 +131,19 @@ require_once __DIR__ . '/src/Database.php';
                 let items = [];
 
                 try {
-                    items = JSON.parse(data);
+                    items = typeof data === "string" ? JSON.parse(data) : data;
                 } catch (e) {
                     console.log("JSON parse error:", data);
                     return;
                 }
 
-                // Clear current grid
+                // Clear left-side grid
                 $(".products-list").empty();
 
-                // Insert items
                 items.forEach(item => {
                     $(".products-list").append(`
                         <div class="product-item">
-                            <img class="product-rect" src="images/${item.product_type}.png">
+                            <img class="product-rect" src="images/${item.product_type.replace(' ', '_')}.png">
                             <label class="product-label">${item.name}</label>
                         </div>
                     `);
@@ -151,30 +151,11 @@ require_once __DIR__ . '/src/Database.php';
             }
         });
     }
-    
-    // toggle sun and moon buttons
+
+    /* -------------------------------------------
+    Toggle Sun/Moon + Reload Routine
+    -------------------------------------------- */
     document.addEventListener("DOMContentLoaded", () => {
-        // const sun  = document.getElementById("sun-icon");
-        // const moon = document.getElementById("moon-icon");
-
-        // if (!sun || !moon) {
-        //     console.log("Sun or moon icons not found.");
-        //     return;
-        // }
-
-        // // START STATE
-        // sun.classList.add("active");
-        // moon.classList.remove("active");
-
-        // sun.onclick = () => {
-        //     sun.classList.add("active");
-        //     moon.classList.remove("active");
-        // };
-
-        // moon.onclick = () => {
-        //     moon.classList.add("active");
-        //     sun.classList.remove("active");
-        // };
         const sun  = document.getElementById("sun-icon");
         const moon = document.getElementById("moon-icon");
 
@@ -183,6 +164,7 @@ require_once __DIR__ . '/src/Database.php';
             sun.classList.add("active");
             moon.classList.remove("active");
             loadRoutineItems();
+            loadProductList();
         }
 
         function activateNight() {
@@ -190,166 +172,101 @@ require_once __DIR__ . '/src/Database.php';
             moon.classList.add("active");
             sun.classList.remove("active");
             loadRoutineItems();
+            loadProductList();
         }
 
-        // initial mode
-        activateMorning();
-
+        activateMorning(); // initial load
         sun.onclick = () => activateMorning();
         moon.onclick = () => activateNight();
     });
 
+    /* -------------------------------------------
+    Search filter (unchanged)
+    -------------------------------------------- */
     function searchFunction() {
         let input = document.getElementById('myInput');
         let filter = input.value.toUpperCase();
         let ul = document.getElementById('productsUL');
         let li = ul.getElementsByTagName('li');
 
-        // loop through list items, and hide those who don't match search query
         for (i = 0; i < li.length; i++) {
             txtSpan = li[i].getElementsByTagName("span")[0];
             txtValue = txtSpan.textContent || txtSpan.innerText;
             
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
                 li[i].style.display = "";
-                li[i].classList.add("highlight");
             } else {
                 li[i].style.display = "none";
-                li[i].classList.remove("highlight");
             }
         }
     }
 
-    // $(document).ready(function () {
-    //     let routineManager = {
-    //         addedProducts: [],
-
-    //         addProduct(product) {
-    //             this.addedProducts.push(product);
-    //         }
-    //     };
-
-    //     // ajax loading
-    //     $.ajax({
-    //         url: "controller/get_products.php",
-    //         method: "GET",
-    //         dataType: "json",
-    //         success: function(products) {
-
-    //             let ul = $("#productsUL");
-    //             ul.empty();
-
-    //             products.forEach(product => {
-    //                 ul.append(`
-    //                     <li class="product-row">
-    //                         <span>${product.name}</span>
-    //                         <img src="images/add.png" 
-    //                             class="add-icon"
-    //                             data-product='${JSON.stringify(product)}'>
-    //                     </li>
-    //                     <hr>
-    //                 `);
-    //             });
-    //         }
-    //     });
-
-    //     // adding products to the right panel
-    //     $("#productsUL").on("click", ".add-icon", function () {
-
-    //         let product = JSON.parse($(this).attr("data-product"));
-    //         routineManager.addProduct(product);
-
-    //         // remove item from the right panel
-    //         $(this).closest("li").next("hr").remove(); 
-    //         $(this).closest("li").remove();
-
-    //         // add product to left panel
-    //         $(".products-list").append(`
-    //             <div class="product-item">
-    //                 <img class="product-rect" 
-    //                     src="${product.image}" 
-    //                     alt="${product.name}">
-    //                 <label class="product-label">${product.name}</label>
-    //             </div>
-    //         `);
-    //     });
-
-    //     // search bar filtering logic
-    //     window.searchFunction = function() {
-    //         let filter = $("#myInput").val().toUpperCase();
-
-    //         $("#productsUL li.product-row").each(function () {
-    //             let txtValue = $(this).find("span").text().toUpperCase();
-
-    //             if (txtValue.indexOf(filter) > -1) {
-    //                 $(this).show().addClass("highlight");
-    //             } else {
-    //                 $(this).hide().removeClass("highlight");
-    //             }
-    //         });
-    //     };
-    // });
-    $(document).ready(function () {
-
-        let routineTime = "Morning"; // synced with DOMContentLoaded
-        const routineManager = { addedProducts: [] };
-
-        /* ---------------- LOAD PRODUCTS LIST (right side) ---------------- */
+    /* -------------------------------------------
+    Load RIGHT-SIDE PRODUCT LIST
+    (Hide items already saved in routine)
+    -------------------------------------------- */
+    function loadProductList() {
         $.ajax({
             url: "controller/routine_controller.php",
             method: "GET",
+            data: { time_of_day: routineTime },
             dataType: "json",
             success: function(products) {
                 let ul = $("#productsUL");
                 ul.empty();
 
                 products.forEach(product => {
-                    ul.append(`
-                        <li class="product-row">
-                            <span>${product.name}</span>
-                            <img src="images/add.png" 
-                                class="add-icon"
-                                data-product='${JSON.stringify(product)}'>
-                        </li>
-                        <hr>
-                    `);
+                    if (!product.in_routine) {
+                        ul.append(`
+                            <li class="product-row">
+                                <span>${product.name}</span>
+                                <img src="images/add.png" 
+                                    class="add-icon"
+                                    data-product='${JSON.stringify(product)}'>
+                            </li>
+                            <hr>
+                        `);
+                    }
                 });
             }
         });
+    }
 
-        /* ---------------- ADD PRODUCT TO ROUTINE ---------------- */
+    /* -------------------------------------------
+    Document Ready
+    -------------------------------------------- */
+    $(document).ready(function () {
+
+        loadRoutineItems();   // left side
+        loadProductList();    // right side
+
+        /* ---------------- add products to routine ---------------- */
         $("#productsUL").on("click", ".add-icon", function () {
             let product = JSON.parse($(this).attr("data-product"));
-            routineManager.addProducts?.push(product);
 
-            // remove from right list
-            $(this).closest("li").next("hr").remove();
-            $(this).closest("li").remove();
-
-            // 1. SAVE TO DATABASE
             $.ajax({
                 url: "controller/save_routine.php",
                 method: "POST",
+                dataType: "json",
                 data: {
                     name: product.name,
-                    type: product.type,     // MUST exist in product JSON
+                    type: product.type,
                     time_of_day: routineTime
                 },
                 success: function(res) {
-                    console.log("Saved product:", res);
+                    console.log("Save response:", res);
+
+                    if (res.error === "duplicate") {
+                        alert("This product is already in your routine.");
+                        return;
+                    }
+
+                    // reload both sides from DB so UI matches current time (Morning/Night)
+                    loadRoutineItems();
+                    loadProductList();
                 }
             });
-
-            // 2. ADD TO LEFT PANEL VISUALLY
-            $(".products-list").append(`
-                <div class="product-item">
-                    <img class="product-rect" src="${product.image}" alt="${product.name}">
-                    <label class="product-label">${product.name}</label>
-                </div>
-            `);
         });
-
-        window.loadRoutineItems = loadRoutineItems;
 
     });
     </script>

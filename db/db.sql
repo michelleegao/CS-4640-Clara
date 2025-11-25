@@ -41,3 +41,6 @@ CREATE TABLE routine_products (
 
     is_active    BOOLEAN NOT NULL DEFAULT TRUE
 );
+ALTER TABLE routine_products
+ADD CONSTRAINT unique_user_product
+UNIQUE (user_id, name, time_of_day, product_type);
