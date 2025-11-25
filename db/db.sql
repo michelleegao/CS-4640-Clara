@@ -35,10 +35,12 @@ CREATE TABLE routine_products (
     -- enforce allowed types:
     product_type TEXT NOT NULL CHECK (
         product_type IN (
-            'cleanser','moisturizer','lotion','serum','toner',
-            'sunscreen','retinoid','retinol'
+            'cleanser','toner','serum', 'moisturizer', 'sunscreen', 'spot treatment','face mask'
         )
     ),
 
     is_active    BOOLEAN NOT NULL DEFAULT TRUE
 );
+ALTER TABLE routine_products
+ADD CONSTRAINT unique_user_product
+UNIQUE (user_id, name, time_of_day, product_type);

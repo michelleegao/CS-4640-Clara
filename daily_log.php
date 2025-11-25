@@ -60,7 +60,7 @@ require_once __DIR__ . '/src/Database.php';
                 <ul>
                     <li><a href="daily_log.php" class="active">Log Today</a></li>
                     <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="current_routine.html">Current Routine</a></li>
+                    <li><a href="current_routine.php">Current Routine</a></li>
                 </ul>
             </div>
 
@@ -117,22 +117,13 @@ require_once __DIR__ . '/src/Database.php';
                     </div>
                 </div>
 
-                <!-- Prompt section -->
-                <div class="prompt-card">
-                    <h3>What Skincare did you do today?</h3>
-                    <div class="prompt-actions">
-                        <button class="btn btn-secondary">I did my Morning routine</button>
-                        <button class="btn btn-secondary">I did my Night routine</button>
-                    </div>
-                    <button class="btn btn-primary wide">Log Breakouts today</button>
-                </div>
-
                 <!-- Breakout logging form -->
-                <form id="logForm" class="log-form" aria-labelledby="log-title">
+                <form id="logForm" class="log-form hidden" aria-labelledby="log-title">
+                    <input type="hidden" name="log_date" id="log_date">
                     <h3 id="log-title">Breakout Log</h3>
 
                     <div class="field-row">
-                        <label for="where">Location</label>
+                        <label>Location</label>
                         <div class="pill-group" id="where">
                             <label><input type="checkbox" name="locations[]" value="nose"> Nose</label>
                             <label><input type="checkbox" name="locations[]" value="chin"> Chin</label>
@@ -153,7 +144,7 @@ require_once __DIR__ . '/src/Database.php';
                     </div>
 
                     <div class="field-row">
-                        <label for="type">Type</label>
+                        <label>Type</label>
                         <div class="pill-group" id="type">
                             <label><input type="checkbox" name="types[]" value="whiteheads"> Whiteheads</label>
                             <label><input type="checkbox" name="types[]" value="blackheads"> Blackheads</label>
@@ -172,10 +163,10 @@ require_once __DIR__ . '/src/Database.php';
                             <label for="activity">Habits/Activity</label>
                             <select id="activity">
                                 <option>Select</option>
-                                <option name="activity[]" value="workout">Workout</option>
-                                <option name="activity[]" value="high stress">High stress</option>
-                                <option name="activity[]" value="good sleep">Good sleep</option>
-                                <option name="activity[]" value="new product">New product</option>
+                                <option value="workout">Workout</option>
+                                <option value="high stress">High stress</option>
+                                <option value="good sleep">Good sleep</option>
+                                <option value="new product">New product</option>
                             </select>
                         </div>
                     </div>
@@ -195,164 +186,196 @@ require_once __DIR__ . '/src/Database.php';
 
             <!-- Right Column: Routine tracker -->
             <aside class="right-col">
-                <div class="routine-card">
-                    <!-- Theme toggle (Sun / Moon) -->
-                    <div class="theme-toggle" style="margin-bottom: 15px;">
-                        <img src="images/sun.png" alt="Sun Icon" id="sun-icon" class="theme-icon active" style="width:40px;">
-                        <img src="images/moon.png" alt="Moon Icon" id="moon-icon" class="theme-icon" style="width:37px;">
+                <!-- Prompt section -->
+                <div class="prompt-card">
+                    <h3>What Skincare did you do today?</h3>
+                    <div class="prompt-actions">
+                        <button class="btn btn-secondary">I did my Morning routine</button>
+                        <button class="btn btn-secondary">I did my Night routine</button>
                     </div>
-
-                    <!-- Morning Routine Section -->
-                    <div class="routine-section">
-                        <div class="routine-header">
-                            <div class="checks">
-                                <label><input type="checkbox"> All</label>
-                                <label><input type="checkbox"> None</label>
-                            </div>
-                        </div>
-
-                        <ul class="product-grid">
-                            <li>
-                                <div class="product-ghost"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost tall"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost short"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <!-- Night Routine Section -->
-                    <div class="routine-section">
-                        <div class="routine-header">
-                            <div class="checks">
-                                <label><input type="checkbox"> All</label>
-                                <label><input type="checkbox"> None</label>
-                            </div>
-                        </div>
-
-                        <ul class="product-grid">
-                            <li>
-                                <div class="product-ghost tall"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost short"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                            <li>
-                                <div class="product-ghost"></div>
-                                <label class="under"><input type="checkbox"> used</label>
-                            </li>
-                        </ul>
-                    </div>
+                    <button id="show-log-btn" class="btn btn-primary wide">Log Breakouts today</button>
                 </div>
             </aside>
         </section>
     </main>
 
     <script>
-        document.getElementById('logForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    document.addEventListener('DOMContentLoaded', () => {
 
-        const formData = new FormData(this);
+        const form = document.getElementById('logForm');
+        if (!form) return;
 
-        try {
-            const response = await fetch('controller/log_controller.php?action=create', {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
+        const showLogBtn = document.getElementById('show-log-btn');
+        if (showLogBtn) {
+            showLogBtn.addEventListener('click', () => {
+                form.classList.remove('hidden');
+
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
-
-            const result = await response.json();
-
-            if (result.success) {
-                showPopup("Log successfully saved!");
-                this.reset();
-            } else {
-                showPopup((result.error || "Failed to save log."));
-            }
-        } catch (err) {
-            showPopup("Network or server error.");
         }
-    });
 
-    function showPopup(message) {
-        const popup = document.createElement('div');
-        popup.textContent = message;
-        popup.className = 'popup-message';
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 3000);
-    }
-    
-    // dynamically update the dates of the logger
-    document.addEventListener("DOMContentLoaded", function () {
-        const today = new Date();
-        const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-        // fill in weekdays and dates for each column
-        document.querySelectorAll(".week-col").forEach((col, i) => {
-            // offset so current date is at the center/index 3
-            const offset = i - 3;
-            const date = new Date(today);
-            date.setDate(today.getDate() + offset);
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-            // weekday
-            const weekdaySpan = col.querySelector(".weekday");
-            weekdaySpan.textContent = weekdayNames[date.getDay()];
+            // client-side validation
+            let hasError = false;
 
-            // date
-            const dateButton = col.querySelector(".date-dot");
-            dateButton.textContent = date.getDate();
-            dateButton.dataset.dateValue = date.toISOString().split("T")[0];
+            const severity = document.getElementById('severity').value;
+            if (!severity) {
+                showPopup("Select a severity level.");
+                hasError = true;
+            }
 
-            // apply stylistic changes to today's date/weekday
-            if (offset === 0) {
-                weekdaySpan.classList.add("today");
-                dateButton.classList.add("day-selected");
-                dateButton.setAttribute("aria-current", "date");
+            const anyLocationChecked = !!document.querySelector('input[name="locations[]"]:checked');
+            const anyTypeChecked     = !!document.querySelector('input[name="types[]"]:checked');
+
+            if (!anyLocationChecked) {
+                showPopup("Select at least one location for your breakout.");
+                hasError = true;
+            }
+
+            if (!anyTypeChecked) {
+                showPopup("Select at least one type for your breakout.");
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('controller/log_controller.php?action=create', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showPopup("Log successfully saved!");
+                    this.reset();
+                } else {
+                    showPopup(result.error || "Failed to save log.");
+                }
+            } catch (err) {
+                showPopup("Network or server error.");
             }
         });
-    });
 
-    // toggle sun and moon buttons
-    document.addEventListener("DOMContentLoaded", () => {
+        function showPopup(message) {
+            const popup = document.createElement('div');
+            popup.textContent = message;
+            popup.className = 'popup-message';
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 3000);
+        }
+
+        /* week slider */
+        let selectedDate = null;
+        let realToday = new Date();
+
+        const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const hiddenDateInput = document.getElementById("log_date");
+        const weekGrid = document.querySelector(".week-grid");
+        const weekCols = document.querySelectorAll(".week-col");
+
+        function sameDay(d1, d2) {
+            return d1.getFullYear() === d2.getFullYear() &&
+                d1.getMonth() === d2.getMonth() &&
+                d1.getDate() === d2.getDate();
+        }
+
+        function renderWeek(baseDate) {
+            weekCols.forEach((col, i) => {
+                const offset = i - 3;
+                const date = new Date(baseDate);
+                date.setDate(baseDate.getDate() + offset);
+
+                const iso = date.toISOString().split("T")[0];
+
+                const weekdaySpan = col.querySelector(".weekday");
+                const dateButton  = col.querySelector(".date-dot");
+
+                // weekday label
+                weekdaySpan.textContent = weekdayNames[date.getDay()];
+
+                // underline current real date
+                if (sameDay(date, realToday)) {
+                    weekdaySpan.classList.add("today");
+                } else {
+                    weekdaySpan.classList.remove("today");
+                }
+
+                // date circle
+                dateButton.textContent = date.getDate();
+                dateButton.dataset.dateValue = iso;
+
+                // selected (middle)
+                if (offset === 0) {
+                    dateButton.classList.add("day-selected");
+                    dateButton.setAttribute("aria-current", "date");
+                } else {
+                    dateButton.classList.remove("day-selected");
+                    dateButton.removeAttribute("aria-current");
+                }
+            });
+
+            hiddenDateInput.value = baseDate.toISOString().split("T")[0];
+        }
+
+        selectedDate = new Date();
+        renderWeek(selectedDate);
+
+        if (weekGrid) {
+            weekGrid.addEventListener("click", (evt) => {
+                const btn = evt.target.closest(".date-dot");
+                if (!btn) return;
+
+                const newDateStr = btn.dataset.dateValue;
+                const newDate = new Date(newDateStr);
+
+                if (sameDay(newDate, selectedDate)) return;
+
+                // animation direction
+                weekGrid.classList.remove("slide-left", "slide-right");
+                void weekGrid.offsetWidth;
+
+                if (newDate > selectedDate) {
+                    weekGrid.classList.add("slide-left");
+                } else {
+                    weekGrid.classList.add("slide-right");
+                }
+
+                // update center date
+                selectedDate = newDate;
+                renderWeek(selectedDate);
+            });
+
+            weekGrid.addEventListener("animationend", () => {
+                weekGrid.classList.remove("slide-left", "slide-right");
+            });
+        }
+
+        /* sun/moon toggle */
         const sun  = document.getElementById("sun-icon");
         const moon = document.getElementById("moon-icon");
 
-        if (!sun || !moon) {
-            console.log("Sun or moon icons not found.");
-            return;
-        }
-
-        // START STATE
-        sun.classList.add("active");
-        moon.classList.remove("active");
-
-        sun.onclick = () => {
+        if (sun && moon) {
             sun.classList.add("active");
             moon.classList.remove("active");
-        };
 
-        moon.onclick = () => {
-            moon.classList.add("active");
-            sun.classList.remove("active");
-        };
+            sun.onclick = () => {
+                sun.classList.add("active");
+                moon.classList.remove("active");
+            };
+
+            moon.onclick = () => {
+                moon.classList.add("active");
+                sun.classList.remove("active");
+            };
+        }
     });
     </script>
 </body>
