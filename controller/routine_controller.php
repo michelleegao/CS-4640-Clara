@@ -4,7 +4,7 @@ session_start();
 
 require_once __DIR__ . '/../src/Database.php';
 
-// Ensure user logged in
+// ensure user logged in
 if (!isset($_SESSION['user_id'])) {
     echo json_encode([]);
     exit;
@@ -12,9 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-/* ----------------------------------------
-   MASTER PRODUCT LIST (RIGHT SIDE OPTIONS)
------------------------------------------ */
+// master product list
 $products = [
     ["name" => "Cleanser",       "image" => "images/cleanser.png",        "type" => "cleanser"],
     ["name" => "Toner",          "image" => "images/toner.png",           "type" => "toner"],
