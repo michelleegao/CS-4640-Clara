@@ -20,7 +20,7 @@ require_once __DIR__ . '/src/Database.php';
     <link rel="stylesheet" href="styles/style.css?v=2">
 </head>
   
-<body>
+<body style="background-color: #eef5ee;">
     <header>
         <nav class="navbar">
             <div class="nav-left">
@@ -86,7 +86,7 @@ require_once __DIR__ . '/src/Database.php';
         </section>
         <!---->
         <section class="chart-small">
-            <h3>Breakout Location</h3>
+            <h3>Breakout Triggers</h3>
             <canvas id="breakoutTriggerChart" aria-label="Pie Chart showing breakout triggers distribution." role="img"></canvas>
         </section>
     </div>
