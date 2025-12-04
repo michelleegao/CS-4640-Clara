@@ -53,31 +53,95 @@ class trends_controller {
                 default: $cutoff = null; break;
             }
 
-            // Build query after filters have been applied
-            $sql = "
+            // Build query for timeline after filters have been applied
+            $sqlTimeline = "
                 SELECT log_date::date AS log_date, COUNT(*) AS breakout_count
                 FROM logs
                 WHERE user_id = :uid
             ";
 
-            if ($cutoff) $sql .= " AND log_date >= :cutoff";
+            if ($cutoff) $sqlTimeline .= " AND log_date >= :cutoff";
             if (!empty($severity) && in_array($severity, ['Mild', 'Moderate', 'Severe'], true)) {
-                $sql .= " AND severity = :severity";
+                $sqlTimeline .= " AND severity = :severity";
             }
 
-            $sql .= " GROUP BY log_date::date ORDER BY log_date::date ASC";
+            $sqlTimeline .= " GROUP BY log_date::date ORDER BY log_date::date ASC";
 
-            $stmt = $pdo->prepare($sql);
+            $stmt = $pdo->prepare($sqlTimeline);
             $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
             if ($cutoff) $stmt->bindValue(':cutoff', $cutoff);
             if (!empty($severity)) $stmt->bindValue(':severity', $severity);
             $stmt->execute();
 
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $timelineData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            // Build query for location bar graph after filters have been applied
+            $sqlLocation = "
+                SELECT locations, COUNT(*) AS location_count
+                FROM logs
+                WHERE user_id = :uid
+            ";
+
+            if ($cutoff) $sqlLocation .= " AND log_date >= :cutoff";
+            if (!empty($severity)) $sqlLocation .= " AND severity = :severity";
+
+            $sqlLocation .= " GROUP BY locations ORDER BY locations ASC";
+
+            $stmtLoc = $pdo->prepare($sqlLocation);
+            $stmtLoc->bindValue(':uid', $uid, PDO::PARAM_INT);
+            if ($cutoff) $stmtLoc->bindValue(':cutoff', $cutoff);
+            if (!empty($severity)) $stmtLoc->bindValue(':severity', $severity);
+            $stmtLoc->execute();
+
+            $locationData = $stmtLoc->fetchAll(PDO::FETCH_ASSOC);
+
+            // Build query for breakout types pie chart after filters have been applied
+            $sqlTypes = "
+                SELECT types, COUNT(*) AS type_count
+                FROM logs
+                WHERE user_id = :uid
+            ";
+
+            if ($cutoff) $sqlTypes .= " AND log_date >= :cutoff";
+            if (!empty($severity)) $sqlTypes .= " AND severity = :severity";
+
+            $sqlTypes .= " GROUP BY types ORDER BY types ASC";
+
+            $stmtTypes = $pdo->prepare($sqlTypes);
+            $stmtTypes->bindValue(':uid', $uid, PDO::PARAM_INT);
+            if ($cutoff) $stmtTypes->bindValue(':cutoff', $cutoff);
+            if (!empty($severity)) $stmtTypes->bindValue(':severity', $severity);
+            $stmtTypes->execute();
+
+            $typeData = $stmtTypes->fetchAll(PDO::FETCH_ASSOC);
+
+            // Build query for breakout types pie chart after filters have been applied
+            $sqlTriggers = "
+                SELECT activity, COUNT(*) AS trigger_count
+                FROM logs
+                WHERE user_id = :uid
+            ";
+
+            if ($cutoff) $sqlTriggers .= " AND log_date >= :cutoff";
+            if (!empty($severity)) $sqlTriggers .= " AND severity = :severity";
+
+            $sqlTriggers .= " GROUP BY activity ORDER BY activity ASC";
+
+            $stmtTriggers = $pdo->prepare($sqlTriggers);
+            $stmtTriggers->bindValue(':uid', $uid, PDO::PARAM_INT);
+            if ($cutoff) $stmtTriggers->bindValue(':cutoff', $cutoff);
+            if (!empty($severity)) $stmtTriggers->bindValue(':severity', $severity);
+            $stmtTriggers->execute();
+
+            $triggersData = $stmtTriggers->fetchAll(PDO::FETCH_ASSOC);
+
+            // JSON response
             echo json_encode([
                 'success' => true,
-                'data' => $data
+                'timeline' => $timelineData,
+                'locations' => $locationData,
+                'types' => $typeData,
+                'triggers' => $triggersData
             ]);
         } catch (Throwable $e) {
             echo json_encode([
