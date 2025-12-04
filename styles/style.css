@@ -48,7 +48,6 @@ body {
     font-weight: 600;
     padding: 12px 18px 10px;
     display: inline-block;
-    transition: background-color 0.2s ease;
 }
 
 .nav-left a.active::before,
@@ -85,8 +84,13 @@ body {
     text-decoration: none;
 }
 
+.nav-left a.home-icon:hover::before {
+    content: none !important;
+}
+
 .nav-left a.home-icon:hover {
-    background-color: transparent;
+    background-color: transparent !important;
+    color: #2F3E2F !important;
 }
 
 .profile-icon {
@@ -578,37 +582,6 @@ canvas {
 .weekday.today {
     text-decoration: underline;
 }
-
-
-/* .week-header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: 600;
-    color: #2f3e2f;
-    margin-bottom: 8px;
-}
-.week-header span.today {
-    font-weight: bold;
-    text-decoration: underline;
-    color: #243e36;
-}
-
-
-.week-dots {
-    display: flex; gap: 12px; align-items: center;
-}
-.week-dots button {
-    width: 44px; height: 44px; border-radius: 50%;
-    border: 1px solid #c9ddc9; background: #f4faf4; color: #2f3e2f;
-    font-weight: 600; cursor: pointer;
-}
-.week-dots .day-selected {
-    background: #ffffff; box-shadow: 0 0 0 4px #d7e6d7 inset;
-    /* border: 2px solid #7ca982;
-    background-color: #eaf7ef;
-    border-radius: 50%;
-    font-weight: bold; 
-} */
 
 
 /* ---------- Buttons ---------- */

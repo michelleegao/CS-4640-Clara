@@ -13,7 +13,7 @@ require_once __DIR__ . '/src/Database.php';
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Clara: Current Routine</title>
-    <link rel="stylesheet" href="styles/style.css?v=5">
+    <link rel="stylesheet" href="styles/style.css?v=7">
     <meta name="author" content="Henna Panjshiri, kew4bd">
     <style>
         .popup-message {
