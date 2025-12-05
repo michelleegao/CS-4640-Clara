@@ -1,9 +1,13 @@
 /* Author: Michelle Gao */
+* {
+    font-family: Helvetica;
+}
+
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: Arial, sans-serif;
+    font-family: Helvetica;
 }
 
 .container {
@@ -19,27 +23,41 @@ body, html {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #e0eec6;
+    background-image: url('../images/login.jpg');
+    background-size: 75%;
     justify-content: center;
+    background-repeat: no-repeat;
+    background-position: 100% center;
     text-align: left;
     padding: 2rem;
 }
 
 .left-side h1 {
     position: absolute;
-    font-size: 3rem;
-    font-weight: 600;
+    font-size: 5rem;
+    font-weight: 100;
     top: 2rem;
     margin: 0;
 }
 
 /* formatting of welcome text */
+.welcome-container {
+    position: absolute;
+    bottom: 3rem;
+    left: 2rem;
+    text-align: left;
+}
+
 .welcome-text {
-    font-size: 3rem;
+    position: static;
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin: 0.1rem 0;
+    /* font-size: 3rem;
     font-weight: 500;
     margin-top: 0.1rem;
     margin-bottom: 0.1rem;
-    max-width: 100%
+    max-width: 100% */
 }
 
 /* login styling */

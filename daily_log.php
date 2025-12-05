@@ -125,11 +125,13 @@ require_once __DIR__ . '/src/Database.php';
                     <div class="field-row">
                         <label>Location</label>
                         <div class="pill-group" id="where">
+                            <label><input type="checkbox" name="locations[]" value="forehead"> Forehead</label>
                             <label><input type="checkbox" name="locations[]" value="nose"> Nose</label>
-                            <label><input type="checkbox" name="locations[]" value="chin"> Chin</label>
-                            <label><input type="checkbox" name="locations[]" value="t-zone"> T-zone</label>
                             <label><input type="checkbox" name="locations[]" value="cheeks"> Cheeks</label>
+                            <label><input type="checkbox" name="locations[]" value="chin"> Chin</label>
+                            <label><input type="checkbox" name="locations[]" value="chest"> Chest</label>
                             <label><input type="checkbox" name="locations[]" value="back"> Back</label>
+                            <label><input type="checkbox" name="locations[]" value="other"> Other</label>
                         </div>
                     </div>
 
@@ -167,6 +169,7 @@ require_once __DIR__ . '/src/Database.php';
                                 <option value="high stress">High stress</option>
                                 <option value="good sleep">Good sleep</option>
                                 <option value="new product">New product</option>
+                                <option value="new product">Medication</option>
                             </select>
                         </div>
                     </div>

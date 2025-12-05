@@ -77,7 +77,7 @@ class trends_controller {
 
             // Build query for location bar graph after filters have been applied
             $sqlLocation = "
-                SELECT locations, COUNT(*) AS location_count
+                SELECT LOWER(unnest(locations)) AS location, COUNT(*) AS location_count
                 FROM logs
                 WHERE user_id = :uid
             ";
@@ -97,7 +97,7 @@ class trends_controller {
 
             // Build query for breakout types pie chart after filters have been applied
             $sqlTypes = "
-                SELECT types, COUNT(*) AS type_count
+                SELECT LOWER(unnest(types)) AS type, COUNT(*) AS type_count
                 FROM logs
                 WHERE user_id = :uid
             ";

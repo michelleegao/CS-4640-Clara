@@ -18,7 +18,7 @@ if (isset($_SESSION['error'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles/login_style.css?v=1">
+    <link rel="stylesheet" href="styles/login_style.css?v=2">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Michelle Gao">
     <title>Sign Up</title>
@@ -29,8 +29,11 @@ if (isset($_SESSION['error'])) {
         <!-- Left side welcome text -->
         <div class="left-side">
             <h1>Clara</h1>
-            <p class="welcome-text">Welcome to Clara</p>
-            <p class="welcome-text">Create an account today</p>
+
+            <div class="welcome-container">
+                <p class="welcome-text">Welcome back</p>
+                <p class="welcome-text">Create an account today</p>
+            </div>
         </div>
 
         <!-- Right side sign-up form -->

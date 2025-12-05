@@ -166,10 +166,11 @@ require_once __DIR__ . '/src/Database.php';
                 const locations = result.locations || [];
 
                 const labelsLocation = locations.map(r => {
-                    if (!r.locations) return "Unknown";
                     // Remove curly braces from Postgres array text
-                    let cleaned = r.locations.replace(/[{}]/g, "");
+                    // let cleaned = r.locations.replace(/[{}]/g, "");
                     // Capitalize first letter
+                    if (!r.location) return "Unknown";
+                    let cleaned = r.location;
                     cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
                     return cleaned;
                 });
@@ -215,10 +216,11 @@ require_once __DIR__ . '/src/Database.php';
                 const types = result.types || [];
 
                 const labelsTypes = types.map(r => {
-                    if (!r.types) return "Unknown";
                     // Remove curly braces from Postgres array text
-                    let cleaned = r.types.replace(/[{}]/g, "");
+                    // let cleaned = r.types.replace(/[{}]/g, "");
                     // Capitalize first letter
+                    if (!r.type) return "Unknown";
+                    let cleaned = r.type;
                     cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
                     return cleaned;
                 });
@@ -238,7 +240,7 @@ require_once __DIR__ . '/src/Database.php';
 
                 const ctxType = document.getElementById('breakoutTypeChart').getContext('2d');
 
-                typesChart = new Chart(ctxType, {
+                typeChart = new Chart(ctxType, {
                     type: 'pie',
                     data: {
                         labels: labelsTypes,
