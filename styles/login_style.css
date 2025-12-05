@@ -27,7 +27,7 @@ body, html {
     background-size: 75%;
     justify-content: center;
     background-repeat: no-repeat;
-    background-position: 100% center;
+    background-position: 65% center;
     text-align: left;
     padding: 2rem;
 }
@@ -43,27 +43,22 @@ body, html {
 /* formatting of welcome text */
 .welcome-container {
     position: absolute;
-    bottom: 3rem;
+    bottom: 2rem;
     left: 2rem;
     text-align: left;
 }
 
 .welcome-text {
     position: static;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 500;
     margin: 0.1rem 0;
-    /* font-size: 3rem;
-    font-weight: 500;
-    margin-top: 0.1rem;
-    margin-bottom: 0.1rem;
-    max-width: 100% */
 }
 
 /* login styling */
 .right-side {
     flex: 1;
-    background-color: white;
+    background-color: #e0eec6;
     display: flex;
     justify-content: center;
     align-items: center;

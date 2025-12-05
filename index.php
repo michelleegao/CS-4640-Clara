@@ -19,7 +19,7 @@ if (isset($_SESSION['error'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles/login_style.css?v=3">
+    <link rel="stylesheet" href="styles/login_style.css?v=4">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Michelle Gao">
     <title>Login Page</title>
